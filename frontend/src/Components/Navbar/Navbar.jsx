@@ -5,44 +5,31 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
   return (
     <nav className="w-full md:flex justify-center items-center bg-black text-white pt-5 hidden">
-      <div className="max-w-[55%]  w-[55%] bg-[#1A1A1A] md:flex justify-between p-2 px-6 rounded-full">
-        <div className="flex gap-2 md:items-center ">
+      <div className="max-w-2/5  w-2/5 bg-[#1A1A1A] md:flex justify-between p-1 px-6 rounded-full">
+        <div className="flex gap-2 md:items-center">
           <GiAbstract037 />
           <h1>
-            <Link
-              to="/"
-              style={{
-                textShadow: "0px 0px 5px #FFFFFF",
-              }}
-            >
-              CSS GENERATOR
-            </Link>{" "}
+            <Link to="/">CSS GENERATOR</Link>{" "}
           </h1>
         </div>
         <div className="flex gap-8">
-          <Link
-            style={{
-              textShadow: "0px 0px 3px #FFFFFF",
-            }}
-          >
-            Portfolio
-          </Link>
-          <Link
-            to="/user/signup"
-            style={{
-              textShadow: "0px 0px 3px #FFFFFF",
-            }}
-          >
-            Signup
-          </Link>
-          <Link
-            to="/user/login"
-            style={{
-              textShadow: "0px 0px 3px #FFFFFF",
-            }}
-          >
-            Login
-          </Link>
+          <div className="border border-transparent px-3  p-1 rounded-3xl">
+            <Link>Portfolio</Link>
+          </div>
+          <div className="border borde-white bg-green-600   hover:border-white  font-semibold px-4  p-1 rounded-3xl flex flex-col nav_ele_container overflow-hidden">
+            <h1 className="transition-all duration-200 ease-in-out">Signup</h1>
+            <Link to="/user/signup" className="link">
+              Signup
+            </Link>
+          </div>
+          <div className="border bg-red-600 border-white px-4  p-1 rounded-3xl nav_ele_container overflow-hidden font-semibold">
+            <h1 className="transition-transform duration-300 ease-in-out">
+              Login
+            </h1>
+            <Link to="/user/login" className="link">
+              Login
+            </Link>
+          </div>
         </div>
       </div>
     </nav>

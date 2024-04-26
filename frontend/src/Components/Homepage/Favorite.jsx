@@ -1,6 +1,7 @@
 import React from "react";
 
 const Favorite = () => {
+  //Fav Cards Wil Come from Backend in Near Future......
   const favCards = [
     {
       icon: "aw",

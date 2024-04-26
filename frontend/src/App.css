@@ -3,3 +3,70 @@
   margin: 0;
   padding: 0;
 }
+
+/* navbar animations */
+#kk {
+  color: red !important;
+}
+.nav_ele_container {
+  position: relative;
+}
+.nav_ele_container > .link {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, 50%);
+  transition: transform 500ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+.nav_ele_container:hover .link {
+  transform: translate(-50%, -50%);
+}
+.nav_ele_container:hover > h1 {
+  transform: translate(0%, -105%);
+  opacity: 0;
+}
+
+/* Get started border animation */
+
+#get_started {
+  border-radius: 20px;
+  position: relative;
+  background-color: black;
+  overflow: hidden;
+  transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+#get_started::before {
+  position: absolute;
+  content: "";
+  background: linear-gradient(
+    to right,
+    rgb(72, 72, 72) 20%,
+    rgb(15, 15, 15) 50%,
+    rgb(194, 194, 194)
+  );
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  animation: rotate 2s cubic-bezier(0.19, 1, 0.22, 1) infinite;
+}
+#get_started::after {
+  position: absolute;
+  content: "";
+  background-color: black;
+  width: 98%;
+  height: 96%;
+  left: 50%;
+  top: 51%;
+  transform: translate(-50%, -50%);
+  border-radius: 20px;
+}
+
+#get_started:hover {
+  scale: 0.97;
+}
+@keyframes rotate {
+  50% {
+    transform: rotate(360deg);
+  }
+}
