@@ -1,0 +1,49 @@
+import React from "react";
+import { Outlet } from "react-router";
+import { Link } from "react-router-dom";
+import { cssprop } from "../../Utils/Cssprop";
+
+const CssProperties = () => {
+  return (
+    <section className="flex">
+      <div className="bg-[#0f0f0f] min-h-screen w-[16%] border-[.5px] border-neutral-700 p-4 text-neutral-200 hidden md:block">
+        <div className="font-semibold text-xl cursor-pointer">
+          <Link to="/">
+            <h2>Css Generator</h2>
+            <div className="flex flex-col gap-3 py-2">
+              {cssprop.map((props, i) => {
+                return (
+                  <div className="flex flex-col gap-2">
+                    <h2 className="text-normal font-normal text-[#bde0fe]">
+                      {props.name}
+                    </h2>
+                    <div className="mt-[-5px]">
+                      <div className="px-3 w-fit">
+                        {props.nameprops.map((prop, i) => {
+                          return (
+                            <Link
+                              to={props.link}
+                              className="text-sm  font-light hover:text-purple-400 transition-colors duration-100"
+                            >
+                              <p>{prop}</p>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </Link>
+        </div>
+        <div className="mt-8">{/* CSS PROPERTIES ENTRY TO BE FILLED  */}</div>
+      </div>
+      <div className="md:w-[84%] w-full">
+        <Outlet />
+      </div>
+    </section>
+  );
+};
+
+export default CssProperties;

@@ -44,7 +44,7 @@ const Textprop = () => {
     newWeight[0].style.fontWeight = value;
   };
 
-  const handleTextShawdow = (e, index) => {
+  const handleTextshadow = (e, index) => {
     e.preventDefault();
     const value = e.target.value;
     setTextshadow((prev) => {
@@ -55,6 +55,7 @@ const Textprop = () => {
     const newTextshadow = document.getElementsByClassName("text_size");
     newTextshadow[0].style.textShadow = `${textshadow[0]}px ${textshadow[1]}px ${textshadow[2]}px ${textshadow[3]}`;
   };
+  
   return (
     <section className="text-white bg-black">
       <div className="pl-8 px-7 p-5 text-4xl font-bold">
@@ -139,26 +140,26 @@ const Textprop = () => {
               <h2 className="text-sm  text-neutral-300">Text Shadow</h2>
               <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
                 <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>Horizontal Shawdow Length</h3>
+                  <h3>Horizontal shadow Length</h3>
                   <input
                     defaultValue="0"
                     type="range"
                     min="-200"
                     max="200"
                     step="1"
-                    onChange={(e) => handleTextShawdow(e, 0)}
+                    onChange={(e) => handleTextshadow(e, 0)}
                   />
                   <p>{textshadow[0]}</p>
                 </div>
                 <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>Vertical Shawdow Length</h3>
+                  <h3>Vertical shadow Length</h3>
                   <input
                     defaultValue="0"
                     type="range"
                     min="-200"
                     max="200"
                     step="1"
-                    onChange={(e) => handleTextShawdow(e, 1)}
+                    onChange={(e) => handleTextshadow(e, 1)}
                   />
                   <p>{textshadow[1]}</p>
                 </div>
@@ -170,16 +171,16 @@ const Textprop = () => {
                     min="0"
                     max="50"
                     step="1"
-                    onChange={(e) => handleTextShawdow(e, 2)}
+                    onChange={(e) => handleTextshadow(e, 2)}
                   />
                   <p>{textshadow[2]}</p>
                 </div>
                 <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>Shawdow Color</h3>
+                  <h3>shadow Color</h3>
                   <input
                     type="color"
                     className="bg-transparent"
-                    onChange={(e) => handleTextShawdow(e, 3)}
+                    onChange={(e) => handleTextshadow(e, 3)}
                   />
                   <p>{textshadow[3]}</p>
                 </div>

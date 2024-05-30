@@ -6,6 +6,10 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Auth from "./Pages/Auth/Auth.jsx";
 import Signup from "./Pages/Signup/Signup.jsx";
 import Login from "./Pages/Login/Login.jsx";
+import CssPropertiesList from "./Pages/Css Generator/CssPropertiesList.jsx";
+import CssProperties from "./Pages/Css Generator/CssProperties.jsx";
+import Textprop from "./Pages/Css Properties/Textprop.jsx";
+import Boxprop from "./Pages/Css Properties/Boxprop.jsx";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +27,24 @@ const router = createBrowserRouter([
       {
         path: "/user/login",
         element: <Login />,
+      },
+    ],
+  },
+  {
+    path: "/cssproperties",
+    element: <CssProperties />,
+    children: [
+      {
+        path: "/cssproperties/text",
+        element: <Textprop />,
+      },
+      {
+        path: "/cssproperties/box",
+        element: <Boxprop />,
+      },
+      {
+        path: "/cssproperties/list",
+        element: <CssPropertiesList />,
       },
     ],
   },
