@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 const userinstance = new Schema({
   username: {
     type: String,
-    required: true,
   },
   email: {
     type: String,
@@ -25,4 +24,5 @@ const userinstance = new Schema({
   },
 });
 
-export default userschema = mongoose.model("userSchema", userinstance);
+const userschema = mongoose.model("userSchema", userinstance);
+export default userschema;

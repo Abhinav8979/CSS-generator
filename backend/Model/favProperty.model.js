@@ -1,23 +1,14 @@
-import { Schema } from "mongoose";
 import mongoose from "mongoose";
 
-const favPropertyinstance = new Schema({
-  cssID: {
-    type: String,
-  },
-  username: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "userSchema",
-  },
-  favCart: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "favCartSchema",
-    },
-  ],
+const cssPropertySchema = new mongoose.Schema({
+  propertyName: { type: String },
 });
 
-export default favPropertyschema = mongoose.model(
-  "favPropertySchema",
-  favPropertyinstance
-);
+// Define a schema for the like cart
+const likeCartSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  likedCssProperties: [cssPropertySchema],
+});
+
+// Create a model from the schema
+export const LikeCart = mongoose.model("LikeCart", likeCartSchema);

@@ -1,44 +1,100 @@
 import { Router } from "express";
-import { isToken } from "../middleware/jwt.controller.js";
-import { generateToken } from "../service/token.service.js";
+import { checkToken, generateToken } from "../service/token.service.js";
+import User from "../Model/user.model.js";
+import bcrypt from "bcrypt";
+import { LikeCart } from "../Model/favProperty.model.js";
 
 const router = Router();
 
-router.route("/signup").post((req, res) => {
-  const { username, email, password, country, phoneNumber } = req.body;
+router.route("/signup").post(async (req, res) => {
+  
+  const { username, email, password, country, phoneNumber } = req.body.data;
+  console.log(username, email, password);
+  try {
+    if (!email && !password) {
+      return res.status(400).json({ error: "Plss enter email or password" });
+    }
 
-  if (user.find({ username })) {
-    throw new Error("USER ALREADY EXISTS");
+    const existingUser = await User.find({ username });
+
+    if (existingUser == []) {
+      return res.status(400).json({ error: "User already exists" });
+    }
+
+    const hashpass = await bcrypt.hash(password, 10);
+
+    const user = new User({
+      username,
+      email,
+      password: hashpass,
+      country,
+      phone_number: phoneNumber,
+    });
+
+    const usercart = new LikeCart({
+      userId: user,
+    });
+
+    await usercart.save();
+    await user.save();
+
+    return res.status(201).json({ message: "User registered successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal server error in SIGNUP" });
   }
-
-  if (!email && !password) {
-    throw new Error("PLEASE ENTER EMAIL AND PASSWORD");
-  }
-
-  const hashpass = bcrypt.hash(password, 10);
-
-  const user = user.create({
-    username,
-    email,
-    password: hashpass,
-    country,
-    phoneNumber,
-  });
-  return res.status(200);
 });
 
-router.route("/login").get(isToken, (req, res) => {
-  const { username, email, password } = req.body;
+router.route("/login").post(async (req, res) => {
+  try {
+    const { username, email, password } = req.body.data;
+    console.log(req.body.data);
 
-  if (!username && !password) {
-    throw new Error("PLEASE ENTER EMAil or password");
-  }
+    if ((!username && !email) || !password) {
+      return res
+        .status(400)
+        .json({ error: "Enter email/username and password" });
+    }
 
-  if (!username || !email) {
-    generateToken(res);
+    let user;
+    if (username) {
+      user = await User.findOne({ username });
+    } else if (email) {
+      user = await User.findOne({ email });
+    }
+    console.log(user);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    if (!isPasswordMatch) {
+      return res.status(400).json({ error: "Wrong password" });
+    }
+
+    const token = generateToken(user);
+    // localStorage.setItem("token", token);
+    return res.status(200).json({
+      message: "LOGIN Successfully",
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
   }
+});
+
+router.route("/logout").get(checkToken, async (req, res) => {
+  res.clearCookie("token");
+
   return res.status(200).json({
-    message: "LOGIN Successfully",
+    message: "Logout Successfully",
   });
 });
+
 export { router };
