@@ -1,10 +1,33 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
+  // const [name, setName] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [number, setNumber] = useState();
+
+  const usenavi = useNavigate();
+
+  const signupHandle = async () => {
+    try {
+      const res = await axios.post("http://localhost:8000/api/user/signup", {
+        data: {
+          email: email,
+          password: password,
+          phoneNumber: number,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    usenavi("/user/login");
+  };
+
   return (
-    <section className="max-w-[600px] flex flex-col gap-4 absolute top-1/2 left-[10%] -translate-y-1/2">
-      <h2 className="text-7xl">
+    <section className="max-w-[600px] flex flex-col gap-4 absolute top-1/2 left-[10%] -translate-y-1/2 z-20">
+      <h2 className="text-7xl text-white">
         Let's be{" "}
         <span
           style={{
@@ -17,25 +40,34 @@ const Signup = () => {
           fast!
         </span>
       </h2>
-      <p className="text-[#dcdcdc] text-xl">
+      <p className="text-[#dcdcdc] text-xl ">
         Sign up to Website to start getting faster
       </p>
-      <input
-        type="text"
-        className="outline-none focus:border-[#a7d2b9] border-2  bg-[#1A1D22] w-full mt-4 p-3 rounded-md text-white hover:border-[#358E5C]"
-        placeholder="User Name"
-      />
+
       <input
         type="text"
         className="outline-none focus:border-[#a7d2b9] border-2  bg-[#1A1D22] w-full p-3 rounded-md text-white hover:border-[#358E5C]"
         placeholder="Email Address"
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        className="outline-none focus:border-[#8cfaba] border-2 bg-[#1A1D22] w-full p-3 rounded-md text-white hover:border-[#358E5C]"
+        placeholder="Password"
+        // value={password}
+        onChange={(e) => setPassword(e.target.value)}
       />
       <input
         type="text"
         className="outline-none focus:border-[#8cfaba] border-2 bg-[#1A1D22] w-full p-3 rounded-md text-white hover:border-[#358E5C]"
-        placeholder="Password"
+        placeholder="Phone Number"
+        // value={password}
+        onChange={(e) => setNumber(e.target.value)}
       />
-      <button className="w-full rounded-md bg-[#8ADEE9] text-black text-center px-3 py-2 font-semibold">
+      <button
+        onClick={() => signupHandle()}
+        className="w-full rounded-md bg-[#8ADEE9] text-black text-center px-3 py-2 font-semibold"
+      >
         Sign up
       </button>
       <div className="flex gap-3">
@@ -50,7 +82,7 @@ const Signup = () => {
         >
           Already have an account?
         </p>
-        <Link to="/user/login" className="font-medium">
+        <Link to="/user/login" className="font-medium text-white">
           Login
         </Link>
       </div>

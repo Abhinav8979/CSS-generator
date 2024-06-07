@@ -10,6 +10,10 @@ import CssPropertiesList from "./Pages/Css Generator/CssPropertiesList.jsx";
 import CssProperties from "./Pages/Css Generator/CssProperties.jsx";
 import Textprop from "./Pages/Css Properties/Textprop.jsx";
 import Boxprop from "./Pages/Css Properties/Boxprop.jsx";
+import Filter from "./Pages/Css Properties/Filter.jsx";
+import Transform from "./Pages/Css Properties/Transform.jsx";
+import ListStyle from "./Pages/Css Properties/ListStyle.jsx";
+import Cursor from "./Pages/Css Properties/Cursor.jsx";
 
 const router = createBrowserRouter([
   {
@@ -39,12 +43,28 @@ const router = createBrowserRouter([
         element: <Textprop />,
       },
       {
+        path: "/cssproperties/list",
+        element: <CssPropertiesList />,
+      },
+      {
         path: "/cssproperties/box",
         element: <Boxprop />,
       },
       {
-        path: "/cssproperties/list",
-        element: <CssPropertiesList />,
+        path: "/cssproperties/filter",
+        element: <Filter />,
+      },
+      {
+        path: "/cssproperties/transform",
+        element: <Transform />,
+      },
+      {
+        path: "/cssproperties/liststyle",
+        element: <ListStyle />,
+      },
+      {
+        path: "/cssproperties/miscellaneous",
+        element: <Cursor />,
       },
     ],
   },

@@ -55,9 +55,9 @@ const Textprop = () => {
     const newTextshadow = document.getElementsByClassName("text_size");
     newTextshadow[0].style.textShadow = `${textshadow[0]}px ${textshadow[1]}px ${textshadow[2]}px ${textshadow[3]}`;
   };
-  
+
   return (
-    <section className="text-white bg-black">
+    <section className="text-white bg-[#0F0F0F] md:h-full">
       <div className="pl-8 px-7 p-5 text-4xl font-bold">
         <h1>Text CSS Generator</h1>
       </div>
@@ -203,13 +203,26 @@ const Textprop = () => {
               <h2>Code</h2>
             </div>
             <div className="p-2 px-4">
-              <p>font-size: {textsize}px;</p>
-              <p>letter-spacing: {letterspacing}px;</p>
-              <p>color: {color};</p>
-              <p>font-weight: {weight};</p>
               <p>
-                text-shadow: {textshadow[0]}px {textshadow[1]}px {textshadow[2]}
-                px {textshadow[3]};
+                font-size: <span className="text-[#15F5BA]">{textsize}px</span>;
+              </p>
+              <p>
+                letter-spacing:{" "}
+                <span className="text-[#15F5BA]">{letterspacing}px</span>;
+              </p>
+              <p>
+                color: <span className="text-[#15F5BA]">{color}</span>;
+              </p>
+              <p>
+                font-weight: <span className="text-[#15F5BA]">{weight}</span>;
+              </p>
+              <p>
+                text-shadow:{" "}
+                <span className="text-[#15F5BA]">
+                  {textshadow[0]}px {textshadow[1]}px {textshadow[2]}
+                  px {textshadow[3]}
+                </span>
+                ;
               </p>
             </div>
           </div>

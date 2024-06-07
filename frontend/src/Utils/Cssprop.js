@@ -12,7 +12,7 @@ export const cssprop = [
   {
     name: "Color",
     nameprops: ["Text Color"],
-    link: "/cssproperties/color",
+    link: "/cssproperties/text",
   },
   {
     name: "Filter",
@@ -37,7 +37,7 @@ export const cssprop = [
   {
     name: "List",
     nameprops: ["List Style"],
-    link: "/cssproperties/list",
+    link: "/cssproperties/liststyle",
   },
   {
     name: "Miscellaneous",

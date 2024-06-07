@@ -4,6 +4,7 @@ const Boxprop = () => {
   const [bordervalue, setBordervalue] = useState([0, "solid", "#000"]);
   const [borderradiusvalue, setBorderradiusvalue] = useState(0);
   const [outlinevalue, setOutlinevalue] = useState([0, "solid", "#000", 0]);
+  const [boxshadow, setBoxshadow] = useState([0, 0, 0, 0, "#000"]);
 
   const handleBordervalue = (e, index) => {
     e.preventDefault();
@@ -42,8 +43,22 @@ const Boxprop = () => {
     newborder[0].style.outlineOffset = `${outlinevalue[3]}px`;
   };
 
+  const handleBoxshadow = (e, index) => {
+    e.preventDefault();
+    const value = e.target.value;
+    setBoxshadow((prev) => {
+      const newTextshadow = [...prev];
+      newTextshadow[index] = value;
+      return newTextshadow;
+    });
+    const newTextshadow = document.getElementsByClassName("box_preview");
+    // console.log(newTextshadow[0].style);
+    newTextshadow[0].style.boxShadow = `${boxshadow[0]}px ${boxshadow[1]}px ${boxshadow[2]}px  ${boxshadow[3]}px ${boxshadow[4]}`;
+    console.log(newTextshadow[0].style.boxShadow);
+  };
+
   return (
-    <section className="text-white bg-black md:h-full">
+    <section className="text-white bg-[#0F0F0F] md:h-full">
       <div className="pl-8 px-7 p-5 text-4xl font-bold">
         <h1>Box CSS Generator</h1>
       </div>
@@ -55,7 +70,7 @@ const Boxprop = () => {
           <div className="md:px-7 px-4 flex gap-3 flex-col">
             {/* Border */}
 
-            <div className="border p-2 px-4 rounded-lg pb-4">
+            <div className="border border-neutral-400 p-2 px-4 rounded-lg pb-4">
               <h2 className="text-sm  text-neutral-300">Border</h2>
               <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
                 <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
@@ -159,7 +174,7 @@ const Boxprop = () => {
 
             {/* border radius */}
 
-            <div className="border p-2 px-4 rounded-lg">
+            <div className="border border-neutral-400  p-2 px-4 rounded-lg">
               <h2 className="text-sm  text-neutral-300">Border Radius</h2>
               <div className="flex gap-5">
                 <input
@@ -176,7 +191,7 @@ const Boxprop = () => {
 
             {/* Outline */}
 
-            <div className="border p-2 px-4 rounded-lg pb-4">
+            <div className="border border-neutral-400  p-2 px-4 rounded-lg pb-4">
               <h2 className="text-sm  text-neutral-300">Outline</h2>
               <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
                 <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
@@ -269,6 +284,70 @@ const Boxprop = () => {
                 </div>
               </div>
             </div>
+
+            {/* BORDER SHADOW */}
+
+            <div className="border border-neutral-400  p-2 px-4 rounded-lg pb-4">
+              <h2 className="text-sm  text-neutral-300">Box Shadow</h2>
+              <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
+                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                  <h3>Horizontal shadow Length</h3>
+                  <input
+                    defaultValue="0"
+                    type="range"
+                    min="-200"
+                    max="200"
+                    step="1"
+                    onChange={(e) => handleBoxshadow(e, 0)}
+                  />
+                  <p>{boxshadow[0]}</p>
+                </div>
+                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                  <h3>Vertical shadow Length</h3>
+                  <input
+                    defaultValue="0"
+                    type="range"
+                    min="-200"
+                    max="200"
+                    step="1"
+                    onChange={(e) => handleBoxshadow(e, 1)}
+                  />
+                  <p>{boxshadow[1]}</p>
+                </div>
+                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                  <h3>Blur Radius</h3>
+                  <input
+                    defaultValue="0"
+                    type="range"
+                    min="0"
+                    max="50"
+                    step="1"
+                    onChange={(e) => handleBoxshadow(e, 2)}
+                  />
+                  <p>{boxshadow[2]}</p>
+                </div>
+                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                  <h3>Spread</h3>
+                  <input
+                    type="range"
+                    min="0"
+                    max="50"
+                    className="bg-transparent"
+                    onChange={(e) => handleBoxshadow(e, 3)}
+                  />
+                  <p>{boxshadow[3]}</p>
+                </div>
+                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                  <h3>Color</h3>
+                  <input
+                    type="color"
+                    className="bg-transparent"
+                    onChange={(e) => handleBoxshadow(e, 4)}
+                  />
+                  <p>{boxshadow[4]}</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -288,15 +367,37 @@ const Boxprop = () => {
             </div>
             <div className="p-2 px-4">
               <p>
-                border: {bordervalue[0]}px {bordervalue[1]} {bordervalue[2]};
+                border:{" "}
+                <span className="text-[#15F5BA]">
+                  {bordervalue[0]}px {bordervalue[1]} {bordervalue[2]}
+                </span>
+                ;
               </p>
-              <p>border-radius: {borderradiusvalue}px;</p>
               <p>
-                outline: {outlinevalue[0]}px {outlinevalue[1]} {outlinevalue[2]}
+                border-radius:{" "}
+                <span className="text-[#15F5BA]">{borderradiusvalue}px</span>;
+              </p>
+              <p>
+                outline:{" "}
+                <span className="text-[#15F5BA]">
+                  {outlinevalue[0]}px {outlinevalue[1]} {outlinevalue[2]}
+                </span>
+                ;
               </p>
               {outlinevalue[3] !== 0 ? (
-                <p>outline-offset: {outlinevalue[3]}</p>
+                <p>
+                  outline-offset:{" "}
+                  <span className="text-[#15F5BA]">{outlinevalue[3]}</span>
+                </p>
               ) : null}
+              <p>
+                box-shadow:{" "}
+                <span className="text-[#15F5BA]">
+                  {boxshadow[0]}px {boxshadow[1]}px {boxshadow[2]}px{" "}
+                  {boxshadow[3]}px {boxshadow[4]}
+                </span>
+                ;
+              </p>
             </div>
           </div>
         </div>
