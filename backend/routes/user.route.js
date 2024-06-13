@@ -7,15 +7,14 @@ import { LikeCart } from "../Model/favProperty.model.js";
 const router = Router();
 
 router.route("/signup").post(async (req, res) => {
-  
-  const { username, email, password, country, phoneNumber } = req.body.data;
-  console.log(username, email, password);
+  const { email, password, phoneNumber } = req.body.data;
+  // console.log(username, email, password);
   try {
     if (!email && !password) {
       return res.status(400).json({ error: "Plss enter email or password" });
     }
 
-    const existingUser = await User.find({ username });
+    const existingUser = await User.find({ email });
 
     if (existingUser == []) {
       return res.status(400).json({ error: "User already exists" });
@@ -24,10 +23,8 @@ router.route("/signup").post(async (req, res) => {
     const hashpass = await bcrypt.hash(password, 10);
 
     const user = new User({
-      username,
       email,
       password: hashpass,
-      country,
       phone_number: phoneNumber,
     });
 
@@ -47,22 +44,17 @@ router.route("/signup").post(async (req, res) => {
 
 router.route("/login").post(async (req, res) => {
   try {
-    const { username, email, password } = req.body.data;
-    console.log(req.body.data);
+    const { email, password } = req.body.data;
+    // console.log(req.body.data);
 
-    if ((!username && !email) || !password) {
-      return res
-        .status(400)
-        .json({ error: "Enter email/username and password" });
+    if (!email || !password) {
+      return res.status(400).json({ error: "Enter email and password" });
     }
 
     let user;
-    if (username) {
-      user = await User.findOne({ username });
-    } else if (email) {
-      user = await User.findOne({ email });
-    }
-    console.log(user);
+
+    user = await User.findOne({ email });
+    // console.log(user);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -79,7 +71,6 @@ router.route("/login").post(async (req, res) => {
       token,
       user: {
         id: user._id,
-        username: user.username,
         email: user.email,
       },
     });

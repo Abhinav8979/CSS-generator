@@ -2,9 +2,6 @@ import { Schema } from "mongoose";
 import mongoose from "mongoose";
 
 const userinstance = new Schema({
-  username: {
-    type: String,
-  },
   email: {
     type: String,
     required: true,
@@ -13,9 +10,6 @@ const userinstance = new Schema({
   password: {
     type: String,
     required: true,
-  },
-  country: {
-    type: String,
   },
   phone_number: {
     type: Number,

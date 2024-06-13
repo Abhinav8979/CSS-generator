@@ -6,17 +6,21 @@ import { LikeCart } from "../Model/favProperty.model.js";
 const cartrouter = Router();
 
 cartrouter.route("/user/getcart").get(async (req, res) => {
-  const { username } = req.body;
+  const { email } = req.body;
 
   try {
-    const userId = await userschema.findOne({ username });
+    const userId = await userschema.findOne({ email });
 
-    const likeCart = await LikeCart.findOne({ userId });
+    const likeCart = await LikeCart.find({ userId });
 
     if (!likeCart[0]) {
-      return res.status(200).json({ message: "NO FAVOURITE CSS PROPERTY" });
+      return res
+        .status(200)
+        .json({ message: "NO FAVOURITE CSS PROPERTY", cartArray: false });
     } else {
-      return res.status(200).json({ message: likeCart.likedCssProperties });
+      return res
+        .status(200)
+        .json({ message: likeCart.likedCssProperties, cartArray: true });
     }
   } catch (error) {
     console.log(error);
@@ -25,10 +29,10 @@ cartrouter.route("/user/getcart").get(async (req, res) => {
 });
 
 cartrouter.route("/user/remove").delete(checkToken, async (req, res) => {
-  const { username, cssName } = req.query;
+  const { email, cssName } = req.query;
 
   try {
-    const userId = await userschema.findOne({ username });
+    const userId = await userschema.findOne({ email });
     const likeCart = await LikeCart.findOne({ userId });
 
     const propertyIndex = likeCart.likedCssProperties.findIndex(
@@ -45,14 +49,17 @@ cartrouter.route("/user/remove").delete(checkToken, async (req, res) => {
 });
 
 cartrouter.route("/user/add").put(async (req, res) => {
-  const { username, cssName } = req.body;
+  const { email, cssName } = req.body.data;
 
   try {
-    const userId = await userschema.findOne({ username });
-    const likeCart = await likeCart.findOne({ userId });
+    const userId = await userschema.findOne({ email });
+    const like = await LikeCart.findOne({ userId });
 
-    likeCart.likedCssProperties.push(cssName);
-    likeCart.save();
+    like.likedCssProperties.push(cssName);
+    console.log(like.likedCssProperties);
+    like.save();
+
+    return res.status(200).json({ message: "added" });
   } catch (error) {
     console.log(error);
     return res.status(400).json({ error: error });
