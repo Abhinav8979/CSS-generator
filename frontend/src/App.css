@@ -5,6 +5,16 @@
 }
 
 /* navbar animations */
+#favitems {
+  transition: all 500ms ease-in-out;
+}
+#fav:hover #favitems {
+  pointer-events: none;
+  opacity: 1;
+  color: black;
+  transform: translateY(-30%);
+}
+
 .nav_ele_container {
   position: relative;
 }

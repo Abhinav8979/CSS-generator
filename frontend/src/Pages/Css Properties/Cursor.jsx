@@ -1,7 +1,13 @@
-import React, { useState } from "react";
+// import { data } from "autoprefixer";
+// import axios from "axios";
+import React, { useContext, useState } from "react";
+// import { UserContext } from "../../Context/UserContext";
+// import { FaCarTunnel } from "react-icons/fa6";
 
 const Cursor = () => {
   const [cursor, setCursor] = useState("auto");
+
+  // const cart = useContext(UserContext);
 
   const handleCursor = (e) => {
     e.preventDefault();
@@ -16,6 +22,23 @@ const Cursor = () => {
     const newCursor = document.getElementsByClassName("cursor");
     newCursor[0].style.cursor = "auto";
   };
+
+  // const addtocart = async (e) => {
+  //   try {
+  //     console.log(cart.userEmail);
+  //     const res = await axios.put("http://localhost:8000/api/user/add", {
+  //       data: {
+  //         email: cart.userEmail,
+  //         cssName: "cursor",
+  //       },
+  //     });
+  //     alert("Added");
+  //     // cart.setUserCart((prev) => [...prev, "cursor"]);
+  //     // cart.setIsCart(true);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <section className="text-white bg-[#0F0F0F] md:h-full">
@@ -55,6 +78,9 @@ const Cursor = () => {
                 </select>
               </div>
             </div>
+            {/* <div className="bg-pink-400 rounded-lg p-4" onClick={addtocart}>
+              <h1>hello</h1>
+            </div> */}
           </div>
         </div>
 

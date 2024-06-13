@@ -1,6 +1,8 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { Link, Navigate, Router, useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { UserContext } from "../../Context/UserContext";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -8,29 +10,33 @@ const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
-  const [cart, setCart] = useState();
+  const cart = useContext(UserContext);
 
   const handlelogin = async () => {
     try {
       const res = await axios.post("http://localhost:8000/api/user/login", {
         data: {
-          username: email,
+          email: email,
           password: password,
-          phoneNumber: "9812134",
         },
       });
-      localStorage.setItem("user", "main hu abhinav");
-      // const cart = await axios.get("http://localhost:8000/api/user/getcart", {
-      //   data: {
-      //     name: email,
-      //   },
-      // });
-      // setCart(cart.data.message);
+
+      cart.setUserEmail(email);
+
+      const cartinstance = await axios.get(
+        "http://localhost:8000/api/user/getcart",
+        {
+          data: {
+            email: email,
+          },
+        }
+      );
+      cart.setUserCart(cartinstance.data.message);
+      cart.setIsCart(cartinstance.data.cartArray);
+      toast(res.data.message);
+      navigate("/");
     } catch (error) {
       console.log(error);
-    } finally {
-      navigate("/");
-      alert(res.data.message);
     }
   };
   return (
@@ -88,6 +94,7 @@ const Login = () => {
           Sign up
         </Link>
       </p>
+      <ToastContainer style={{ zIndex: "20" }} />
     </section>
   );
 };

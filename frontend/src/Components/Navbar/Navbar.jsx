@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { GiAbstract037 } from "react-icons/gi";
 import { Link } from "react-router-dom";
+import { UserContext } from "../../Context/UserContext";
 
 const Navbar = () => {
   const parentref = useRef();
@@ -9,9 +10,14 @@ const Navbar = () => {
   const signupref = useRef();
   const loginref = useRef();
   const [user, setUser] = useState();
+  // const [hovering, setHovering] = useState(false);
+
+  const cart = useContext(UserContext);
 
   useEffect(() => {
-    setUser(localStorage.getItem("user"));
+    // setUser(localStorage.getItem("user"));
+
+    setUser(cart.userEmail);
   });
 
   const handlenavbarenter = (e, index) => {
@@ -32,7 +38,7 @@ const Navbar = () => {
       width = loginref.current.getBoundingClientRect().width;
     }
 
-    console.log(left - parentleft);
+    // console.log(left - parentleft);
 
     ref.current.style.opacity = 1;
     ref.current.style.transform = `translateX(${left - parentleft + 30}px`;
@@ -52,6 +58,7 @@ const Navbar = () => {
             <Link to="/">CSS GENERATOR</Link>{" "}
           </h1>
         </div>
+
         <div className="flex gap-3  relative" ref={parentref}>
           <div
             className="bg-white z-20 absolute  left-[-30px] w-[20px] h-full transition-all duration-500 ease-in-out pointer-events-none rounded-3xl opacity-0"
@@ -63,7 +70,33 @@ const Navbar = () => {
             onMouseEnter={(e) => handlenavbarenter(e, 0)}
             onMouseLeave={handlenavbarleave}
           >
-            <Link to="/cssproperties/list">Properties</Link>
+            <div id="fav" className="bg-red">
+              <p>Properties</p>
+              <div
+                id="favitems"
+                className="min-h-[50px] opacity-0 absolute bg-white p-2 font-semibold text-sm top-[180%] left-0 rounded-lg flex items-center justify-center"
+              >
+                <div className="flex gap-2 flex-col p-2 ">
+                  {cart.isCart ? (
+                    // cart.userCart.map((item, index) => {
+                    //   return (
+                    //     <div key={index} className="flex items-center gap-2">
+                    //       <div className="flex items-center gap-2">
+                    //         <div className="bg-black w-4 h-4 rounded-full"></div>
+                    //         <p className="text-white">{item.propertyName}</p>
+                    //       </div>
+                    //     </div>
+                    //   );
+                    // })
+                    <div>{cart.userCart}</div>
+                  ) : (
+                    <>
+                      <p>{cart.userCart}</p>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
           <div
             className="font-semibold px-4  p-1 rounded-3xl flex flex-col nav_ele_container overflow-hidden z-20 hover:text-black hover:font-semibold"

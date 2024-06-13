@@ -14,6 +14,7 @@ import Filter from "./Pages/Css Properties/Filter.jsx";
 import Transform from "./Pages/Css Properties/Transform.jsx";
 import ListStyle from "./Pages/Css Properties/ListStyle.jsx";
 import Cursor from "./Pages/Css Properties/Cursor.jsx";
+import { UserProvider } from "./Context/UserContext.jsx";
 
 const router = createBrowserRouter([
   {
@@ -72,8 +73,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router}>
-      <App />
-    </RouterProvider>
+    <UserProvider>
+      <RouterProvider router={router}>
+        <App />
+      </RouterProvider>
+    </UserProvider>
   </React.StrictMode>
 );
