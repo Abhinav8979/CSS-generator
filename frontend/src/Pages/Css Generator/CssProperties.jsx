@@ -16,20 +16,21 @@ const CssProperties = () => {
             <div className="flex flex-col gap-3 py-2">
               {cssprop.map((props, i) => {
                 return (
-                  <div className="flex flex-col gap-2">
+                  <div key={i} className="flex flex-col gap-2">
                     <h2 className="text-normal font-normal text-[#bde0fe]">
                       {props.name}
                     </h2>
                     <div className="mt-[-5px]">
                       <div className="px-3 w-fit ">
-                        {props.nameprops.map((prop, i) => {
+                        {props.children.map((prop, i) => {
                           return (
                             <Link
-                              to={props.link}
+                              key={i}
+                              to={prop.link}
                               className="text-sm  font-light hover:text-[#FFEBB2] transition-all duration-100"
                             >
                               <p className="p-1 px-3 rounded-xl hover:bg-[#8644A2]">
-                                {prop}
+                                {prop.name}
                               </p>
                             </Link>
                           );

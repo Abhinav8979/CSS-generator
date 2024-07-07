@@ -40,7 +40,7 @@ const router = createBrowserRouter([
     element: <CssProperties />,
     children: [
       {
-        path: "/cssproperties/text",
+        path: "/cssproperties/text/:textId",
         element: <Textprop />,
       },
       {
@@ -48,15 +48,15 @@ const router = createBrowserRouter([
         element: <CssPropertiesList />,
       },
       {
-        path: "/cssproperties/box",
+        path: "/cssproperties/box/:boxId",
         element: <Boxprop />,
       },
       {
-        path: "/cssproperties/filter",
+        path: "/cssproperties/filter/:filterId",
         element: <Filter />,
       },
       {
-        path: "/cssproperties/transform",
+        path: "/cssproperties/transform/:transformId",
         element: <Transform />,
       },
       {

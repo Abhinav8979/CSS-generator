@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { FaHeart } from "react-icons/fa";
+import { CiHeart } from "react-icons/ci";
+import { UserContext } from "../../Context/UserContext";
 
 const Transform = () => {
   //   const [prespective, setPrespective] = useState(0);
@@ -9,12 +13,41 @@ const Transform = () => {
   const [sameScale, setSameScale] = useState(false);
   const [sameRotation, setSameRotation] = useState(false);
 
-  //   const handlePrespective = (e) => {
-  //     e.preventDefault();
-  //     setPrespective(e.target.value);
-  //     const newColor = document.getElementsByClassName("transform_parent");
-  //     newColor[0].style.prespective = `${prespective}px`;
-  //   };
+  const [click, setClick] = useState(false);
+
+  const [param, setParam] = useState();
+  const parameter = useParams();
+
+  const user = useContext(UserContext);
+
+  useEffect(() => {
+    setParam(parameter.transformId);
+    // console.log(parameter);
+  }, [parameter]);
+
+  const handleLike = async () => {
+    const res = await axios.put("http://localhost:8000/api/user/addcart", {
+      data: {
+        cssName: param,
+        email: user.userEmail,
+      },
+    });
+    // console.log(res);
+    setClick(true);
+  };
+
+  const handleDislike = async () => {
+    const res = await axios.delete(
+      "http://localhost:8000/api/user/removecart",
+      {
+        data: {
+          cssName: param,
+          email: user.userEmail,
+        },
+      }
+    );
+    setClick(false);
+  };
 
   const handleRotate = (e, index) => {
     e.preventDefault();
@@ -87,207 +120,231 @@ const Transform = () => {
             <h2>Options</h2>
           </div>
 
-          {/* Prespective */}
-
-          {/* <div className="md:px-7 px-4 flex gap-3 flex-col">
-            <div className="border p-2 px-4 rounded-lg">
-              <h2 className="text-sm  text-neutral-300">Prespective</h2>
-              <div className="flex gap-5">
-                <input
-                  defaultValue="100"
-                  type="range"
-                  min="0"
-                  max="500"
-                  step="1"
-                  value={prespective}
-                  onChange={handlePrespective}
-                />
-                <p>{prespective}</p>
-              </div>
-            </div>
-          </div> */}
-
           {/* Rotation */}
 
-          <div className="border p-2 mx-7 px-4 rounded-lg pb-4">
-            <h2 className="text-sm  text-neutral-300">Rotate</h2>
-            <div>
-              <input
-                type="checkbox"
-                onChange={() => setSameRotation((prev) => !prev)}
-              />
-              <span className="pl-2">Use the same value for X and Y</span>
-            </div>
-            {sameRotation ? (
-              <div className="md:px-7 px-4 flex gap-3 flex-col">
-                <div className="border p-2 px-4 rounded-lg">
-                  <h2 className="text-sm  text-neutral-300">Rotate</h2>
-                  <div className="flex gap-5">
+          {param === "rotate" && (
+            <div className="border p-2 mx-7 px-4 rounded-lg pb-4">
+              <div className="flex  justify-between">
+                <h2 className="text-sm  text-neutral-300">Rotate</h2>
+                <p>
+                  {click ? (
+                    <FaHeart onDoubleClick={handleDislike} />
+                  ) : (
+                    <CiHeart onDoubleClick={handleLike} />
+                  )}
+                </p>
+              </div>{" "}
+              <div>
+                <input
+                  type="checkbox"
+                  onChange={() => setSameRotation((prev) => !prev)}
+                />
+                <span className="pl-2">Use the same value for X and Y</span>
+              </div>
+              {sameRotation ? (
+                <div className="md:px-7 px-4 flex gap-3 flex-col">
+                  <div className="border p-2 px-4 rounded-lg">
+                    <h2 className="text-sm  text-neutral-300">Rotate</h2>
+                    <div className="flex gap-5">
+                      <input
+                        defaultValue="100"
+                        type="range"
+                        min="0"
+                        max="360"
+                        step="1"
+                        value={rotate[0]}
+                        onChange={(e) => handleRotate(e, 0)}
+                      />
+                      <p>{rotate[0]}</p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
+                  <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                    <h3>rotateX</h3>
                     <input
-                      defaultValue="100"
+                      defaultValue="0"
                       type="range"
                       min="0"
                       max="360"
                       step="1"
-                      value={rotate[0]}
-                      onChange={(e) => handleRotate(e, 0)}
+                      onChange={(e) => handleRotate(e, 1)}
                     />
-                    <p>{rotate[0]}</p>
+                    <p>{rotate[1]}</p>
+                  </div>
+                  <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                    <h3>rotateY</h3>
+                    <input
+                      defaultValue="0"
+                      type="range"
+                      min="0"
+                      max="360"
+                      step="1"
+                      onChange={(e) => handleRotate(e, 2)}
+                    />
+                    <p>{rotate[2]}</p>
                   </div>
                 </div>
-              </div>
-            ) : (
-              <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
-                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>rotateX</h3>
-                  <input
-                    defaultValue="0"
-                    type="range"
-                    min="0"
-                    max="360"
-                    step="1"
-                    onChange={(e) => handleRotate(e, 1)}
-                  />
-                  <p>{rotate[1]}</p>
-                </div>
-                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>rotateY</h3>
-                  <input
-                    defaultValue="0"
-                    type="range"
-                    min="0"
-                    max="360"
-                    step="1"
-                    onChange={(e) => handleRotate(e, 2)}
-                  />
-                  <p>{rotate[2]}</p>
-                </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
 
           {/* Scale */}
 
-          <div className="border p-2 mx-7 px-4 rounded-lg pb-4">
-            <h2 className="text-sm  text-neutral-300">Scale</h2>
-            <div>
-              <input
-                type="checkbox"
-                onChange={() => setSameScale((prev) => !prev)}
-              />
-              <span className="pl-2">Use the same value for X and Y</span>
-            </div>
-            {sameScale ? (
-              <div className="md:px-7 px-4 flex gap-3 flex-col">
-                <div className="border p-2 px-4 rounded-lg">
-                  <h2 className="text-sm  text-neutral-300">Scale</h2>
-                  <div className="flex gap-5">
+          {param === "scale" && (
+            <div className="border p-2 mx-7 px-4 rounded-lg pb-4">
+              <div className="flex  justify-between">
+                <h2 className="text-sm  text-neutral-300">Scale</h2>
+                <p>
+                  {click ? (
+                    <FaHeart onDoubleClick={handleDislike} />
+                  ) : (
+                    <CiHeart onDoubleClick={handleLike} />
+                  )}
+                </p>
+              </div>{" "}
+              <div>
+                <input
+                  type="checkbox"
+                  onChange={() => setSameScale((prev) => !prev)}
+                />
+                <span className="pl-2">Use the same value for X and Y</span>
+              </div>
+              {sameScale ? (
+                <div className="md:px-7 px-4 flex gap-3 flex-col">
+                  <div className="border p-2 px-4 rounded-lg">
+                    <h2 className="text-sm  text-neutral-300">Scale</h2>
+                    <div className="flex gap-5">
+                      <input
+                        defaultValue="100"
+                        type="range"
+                        min="0"
+                        max="2"
+                        step=".1"
+                        value={scale[0]}
+                        onChange={(e) => handleScale(e, 0)}
+                      />
+                      <p>{scale[0]}</p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
+                  <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                    <h3>scaleX</h3>
                     <input
-                      defaultValue="100"
+                      defaultValue="0"
                       type="range"
                       min="0"
                       max="2"
-                      step=".1"
-                      value={scale[0]}
-                      onChange={(e) => handleScale(e, 0)}
+                      step="0.1"
+                      onChange={(e) => handleScale(e, 1)}
                     />
-                    <p>{scale[0]}</p>
+                    <p>{scale[1]}</p>
+                  </div>
+                  <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                    <h3>scaleY</h3>
+                    <input
+                      defaultValue="0"
+                      type="range"
+                      min="0"
+                      max="2"
+                      step="0.1"
+                      onChange={(e) => handleScale(e, 2)}
+                    />
+                    <p>{scale[2]}</p>
                   </div>
                 </div>
-              </div>
-            ) : (
-              <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
-                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>scaleX</h3>
-                  <input
-                    defaultValue="0"
-                    type="range"
-                    min="0"
-                    max="2"
-                    step="0.1"
-                    onChange={(e) => handleScale(e, 1)}
-                  />
-                  <p>{scale[1]}</p>
-                </div>
-                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>scaleY</h3>
-                  <input
-                    defaultValue="0"
-                    type="range"
-                    min="0"
-                    max="2"
-                    step="0.1"
-                    onChange={(e) => handleScale(e, 2)}
-                  />
-                  <p>{scale[2]}</p>
-                </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
 
           {/* Skew */}
 
-          <div className="border p-2 mx-7 px-4 rounded-lg pb-4">
-            <h2 className="text-sm  text-neutral-300">Skew</h2>
-            <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
-              <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                <h3>SkewX</h3>
-                <input
-                  defaultValue="0"
-                  type="range"
-                  min="0"
-                  max="90"
-                  step="1"
-                  onChange={(e) => handleSkew(e, 0)}
-                />
-                <p>{skew[0]}</p>
-              </div>
-              <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                <h3>SkewY</h3>
-                <input
-                  defaultValue="0"
-                  type="range"
-                  min="0"
-                  max="90"
-                  step="1"
-                  onChange={(e) => handleSkew(e, 1)}
-                />
-                <p>{skew[1]}</p>
+          {param === "skew" && (
+            <div className="border p-2 mx-7 px-4 rounded-lg pb-4">
+              <div className="flex  justify-between">
+                <h2 className="text-sm  text-neutral-300">Skew</h2>
+                <p>
+                  {click ? (
+                    <FaHeart onDoubleClick={handleDislike} />
+                  ) : (
+                    <CiHeart onDoubleClick={handleLike} />
+                  )}
+                </p>
+              </div>{" "}
+              <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
+                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                  <h3>SkewX</h3>
+                  <input
+                    defaultValue="0"
+                    type="range"
+                    min="0"
+                    max="90"
+                    step="1"
+                    onChange={(e) => handleSkew(e, 0)}
+                  />
+                  <p>{skew[0]}</p>
+                </div>
+                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                  <h3>SkewY</h3>
+                  <input
+                    defaultValue="0"
+                    type="range"
+                    min="0"
+                    max="90"
+                    step="1"
+                    onChange={(e) => handleSkew(e, 1)}
+                  />
+                  <p>{skew[1]}</p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Translate */}
 
-          <div className="border p-2 px-4  mx-7 rounded-lg pb-4">
-            <h2 className="text-sm  text-neutral-300">Translate</h2>
-            <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
-              <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                <h3>TranslateX</h3>
-                <input
-                  defaultValue="0"
-                  type="range"
-                  min="-200"
-                  max="200"
-                  step="1"
-                  onChange={(e) => handleTranslate(e, 0)}
-                />
-                <p>{translate[0]}</p>
-              </div>
-              <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                <h3>TranslateY</h3>
-                <input
-                  defaultValue="0"
-                  type="range"
-                  min="-200"
-                  max="200"
-                  step="1"
-                  onChange={(e) => handleTranslate(e, 1)}
-                />
-                <p>{translate[1]}</p>
+          {param === "translate" && (
+            <div className="border p-2 px-4  mx-7 rounded-lg pb-4">
+              <div className="flex  justify-between">
+                <h2 className="text-sm  text-neutral-300">Translate</h2>
+                <p>
+                  {click ? (
+                    <FaHeart onDoubleClick={handleDislike} />
+                  ) : (
+                    <CiHeart onDoubleClick={handleLike} />
+                  )}
+                </p>
+              </div>{" "}
+              <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
+                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                  <h3>TranslateX</h3>
+                  <input
+                    defaultValue="0"
+                    type="range"
+                    min="-200"
+                    max="200"
+                    step="1"
+                    onChange={(e) => handleTranslate(e, 0)}
+                  />
+                  <p>{translate[0]}</p>
+                </div>
+                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                  <h3>TranslateY</h3>
+                  <input
+                    defaultValue="0"
+                    type="range"
+                    min="-200"
+                    max="200"
+                    step="1"
+                    onChange={(e) => handleTranslate(e, 1)}
+                  />
+                  <p>{translate[1]}</p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* PREVIEW AND CODE SECTION */}
@@ -311,39 +368,47 @@ const Transform = () => {
               <h2>Code</h2>
             </div>
             <div className="p-2 px-4">
-              <p>
-                transform:
-                <span className="text-[#15F5BA]">
-                  {sameRotation
-                    ? ` rotate${rotate[0]}`
-                    : ` rotateX(${rotate[1]}) rotateY(${rotate[2]})`}
-                </span>
-                ;
-              </p>
-              <p>
-                transform:
-                <span className="text-[#15F5BA]">
-                  {sameScale
-                    ? `scale(${scale[0]})`
-                    : `scale(${scale[1]},${scale[2]})`}{" "}
-                </span>
-                ;
-              </p>
-              <p>
-                transform:{" "}
-                <span className="text-[#15F5BA]">
-                  {" "}
-                  skew({(skew[0], skew[1])})
-                </span>
-                ;
-              </p>
-              <p>
-                transform:{" "}
-                <span className="text-[#15F5BA]">
-                  translate({translate[0]},{translate[1]})
-                </span>
-                ;
-              </p>
+              {param === "rotate" && (
+                <p>
+                  transform:
+                  <span className="text-[#15F5BA]">
+                    {sameRotation
+                      ? ` rotate${rotate[0]}`
+                      : ` rotateX(${rotate[1]}) rotateY(${rotate[2]})`}
+                  </span>
+                  ;
+                </p>
+              )}
+              {param === "scale" && (
+                <p>
+                  transform:
+                  <span className="text-[#15F5BA]">
+                    {sameScale
+                      ? `scale(${scale[0]})`
+                      : `scale(${scale[1]},${scale[2]})`}{" "}
+                  </span>
+                  ;
+                </p>
+              )}
+              {param === "skew" && (
+                <p>
+                  transform:{" "}
+                  <span className="text-[#15F5BA]">
+                    {" "}
+                    skew({(skew[0], skew[1])})
+                  </span>
+                  ;
+                </p>
+              )}
+              {param === "translate" && (
+                <p>
+                  transform:{" "}
+                  <span className="text-[#15F5BA]">
+                    translate({translate[0]},{translate[1]})
+                  </span>
+                  ;
+                </p>
+              )}
             </div>
           </div>
         </div>

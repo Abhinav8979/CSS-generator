@@ -21,13 +21,13 @@ const CssPropertiesList = () => {
                 <h2 className="">{props.name}</h2>
                 <div className="flex flex-wrap  text-neutral-400 font-normal text-base">
                   <div className="flex gap-5 flex-wrap font-normal mt-3">
-                    {props.nameprops.map((prop, i) => {
+                    {props.children.map((prop, i) => {
                       return (
                         <Link
-                          to={props.link}
+                          to={prop.link}
                           className="flex hover:scale-[1.05] transition-all duration-300 ease-in-out justify-between px-3 py-2 border  md:w-[300px]  bg-neutral-900 rounded-lg cursor-pointer hover:border-[#15F5BA]"
                         >
-                          <p>{prop}</p>
+                          <p>{prop.name}</p>
                           <p>&rarr;</p>
                         </Link>
                       );

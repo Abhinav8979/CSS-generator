@@ -1,47 +1,125 @@
 export const cssprop = [
   {
     name: "Box",
-    nameprops: ["Outline", "Box Shadow", "Border", "Border Radius"],
-    link: "/cssproperties/box",
+    children: [
+      {
+        name: "Outline",
+        link: "/cssproperties/box/outline",
+      },
+      {
+        name: "Box Shadow",
+        link: "/cssproperties/box/shadow",
+      },
+      {
+        name: "Border",
+        link: "/cssproperties/box/border",
+      },
+      {
+        name: "Border Radius",
+        link: "/cssproperties/box/borderradius",
+      },
+    ],
   },
   {
     name: "Text",
-    nameprops: ["Text Size", "Letter Spacing", "Text Weight", "Text Shadow"],
-    link: "/cssproperties/text",
-  },
-  {
-    name: "Color",
-    nameprops: ["Text Color"],
-    link: "/cssproperties/text",
+    children: [
+      {
+        name: "Text Size",
+        link: "/cssproperties/text/textsize",
+      },
+      {
+        name: "Letter Spacing",
+        link: "/cssproperties/text/letterspacing",
+      },
+      {
+        name: "Text Weight",
+        link: "/cssproperties/text/weight",
+      },
+      {
+        name: "Text Shadow",
+        link: "/cssproperties/text/shadow",
+      },
+      {
+        name: "Color",
+        nameprops: ["Text Color"],
+        link: "/cssproperties/text/color",
+      },
+    ],
   },
   {
     name: "Filter",
-    nameprops: [
-      "Blur",
-      "Brightness",
-      "Contrast",
-      "Drop Shadow",
-      "Grayscale",
-      "Hue Rotate",
-      "Invert",
-      "Saturate",
-      "Sepia",
+    children: [
+      {
+        name: "Blur",
+        link: "/cssproperties/filter/blur",
+      },
+      {
+        name: "Brightness",
+        link: "/cssproperties/filter/brightness",
+      },
+      {
+        name: "Contrast",
+        link: "/cssproperties/filter/contrast",
+      },
+      // {
+      //   name: "Drop Shadow",
+      //   link: "/cssproperties/filter/dropshadow",
+      // },
+      {
+        name: "Grayscale",
+        link: "/cssproperties/filter/grayscale",
+      },
+      {
+        name: "Hue Rotate",
+        link: "/cssproperties/filter/huerotate",
+      },
+      {
+        name: "Invert",
+        link: "/cssproperties/filter/invert",
+      },
+      {
+        name: "Saturate",
+        link: "/cssproperties/filter/saturate",
+      },
+      {
+        name: "Sepia",
+        link: "/cssproperties/filter/sepia",
+      },
     ],
-    link: "/cssproperties/filter",
   },
   {
     name: "Transform",
-    nameprops: ["Perspective", "Scale", "Skew", "Rotate", "Translate"],
-    link: "/cssproperties/transform",
+    children: [
+      // {
+      //   name: "Perspective",
+      //   link: "/cssproperties/transform/perspective",
+      // },
+      {
+        name: "Scale",
+        link: "/cssproperties/transform/scale",
+      },
+      {
+        name: "Skew",
+        link: "/cssproperties/transform/skew",
+      },
+      {
+        name: "Rotate",
+        link: "/cssproperties/transform/rotate",
+      },
+      {
+        name: "Translate",
+        link: "/cssproperties/transform/translate",
+      },
+    ],
   },
   {
     name: "List",
-    nameprops: ["List Style"],
-    link: "/cssproperties/liststyle",
+    children: [{ name: "List Style", link: "/cssproperties/liststyle" }],
+    // link: "/cssproperties/liststyle",
   },
   {
     name: "Miscellaneous",
-    nameprops: ["Cursor"],
-    link: "/cssproperties/miscellaneous",
+    children: [{ name: "Cursor", link: "/cssproperties/miscellaneous" }],
+    // link: "",
   },
 ];

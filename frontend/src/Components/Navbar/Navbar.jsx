@@ -9,7 +9,7 @@ const Navbar = () => {
   const portref = useRef();
   const signupref = useRef();
   const loginref = useRef();
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
   // const [hovering, setHovering] = useState(false);
 
   const cart = useContext(UserContext);
@@ -71,7 +71,7 @@ const Navbar = () => {
             onMouseLeave={handlenavbarleave}
           >
             <div id="fav" className="bg-red">
-              <p>Properties</p>
+              <p>Favorites</p>
               <div
                 id="favitems"
                 className="min-h-[50px] opacity-0 absolute bg-white p-2 font-semibold text-sm top-[180%] left-0 rounded-lg flex items-center justify-center"
@@ -91,7 +91,11 @@ const Navbar = () => {
                     <div>{cart.userCart}</div>
                   ) : (
                     <>
-                      <p>{cart.userCart}</p>
+                      {user === null ? (
+                        <p>Login to make Favorite cart</p>
+                      ) : (
+                        <p>{cart.userCart}</p>
+                      )}
                     </>
                   )}
                 </div>

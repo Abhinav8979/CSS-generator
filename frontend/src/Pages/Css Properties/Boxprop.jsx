@@ -1,10 +1,50 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { UserContext } from "../../Context/UserContext";
+import { FaHeart } from "react-icons/fa";
+import { CiHeart } from "react-icons/ci";
 
 const Boxprop = () => {
   const [bordervalue, setBordervalue] = useState([0, "solid", "#000"]);
   const [borderradiusvalue, setBorderradiusvalue] = useState(0);
   const [outlinevalue, setOutlinevalue] = useState([0, "solid", "#000", 0]);
   const [boxshadow, setBoxshadow] = useState([0, 0, 0, 0, "#000"]);
+  const [click, setClick] = useState(false);
+
+  const [param, setParam] = useState();
+  const parameter = useParams();
+
+  const user = useContext(UserContext);
+
+  useEffect(() => {
+    setParam(parameter.boxId);
+    console.log(parameter);
+  }, [parameter]);
+
+  const handleLike = async () => {
+    const res = await axios.put("http://localhost:8000/api/user/addcart", {
+      data: {
+        cssName: param,
+        email: user.userEmail,
+      },
+    });
+    // console.log(res);
+    setClick(true);
+  };
+
+  const handleDislike = async () => {
+    const res = await axios.delete(
+      "http://localhost:8000/api/user/removecart",
+      {
+        data: {
+          cssName: param,
+          email: user.userEmail,
+        },
+      }
+    );
+    setClick(false);
+  };
 
   const handleBordervalue = (e, index) => {
     e.preventDefault();
@@ -70,284 +110,328 @@ const Boxprop = () => {
           <div className="md:px-7 px-4 flex gap-3 flex-col">
             {/* Border */}
 
-            <div className="border border-neutral-400 p-2 px-4 rounded-lg pb-4">
-              <h2 className="text-sm  text-neutral-300">Border</h2>
-              <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
-                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>Border Width</h3>
-                  <input
-                    defaultValue="0"
-                    type="range"
-                    min="0"
-                    max="20"
-                    step="1"
-                    onChange={(e) => handleBordervalue(e, 0)}
-                  />
-                  <p>{bordervalue[0]}</p>
+            {param === "border" && (
+              <div className="border border-neutral-400 p-2 px-4 rounded-lg pb-4">
+                <div className="flex  justify-between">
+                  <h2 className="text-sm  text-neutral-300">Border</h2>
+                  <p>
+                    {click ? (
+                      <FaHeart onDoubleClick={handleDislike} />
+                    ) : (
+                      <CiHeart onDoubleClick={handleLike} />
+                    )}
+                  </p>
                 </div>
-                <div className="flex md:gap-2 gap-2 md:flex-row flex-col">
-                  <h3>Border Style</h3>
-                  <label>
+                <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
+                  <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                    <h3>Border Width</h3>
                     <input
-                      type="radio"
-                      name="style"
-                      value="solid"
-                      checked
-                      className="text-white"
-                      onChange={(e) => handleBordervalue(e, 1)}
+                      defaultValue="0"
+                      type="range"
+                      min="0"
+                      max="20"
+                      step="1"
+                      onChange={(e) => handleBordervalue(e, 0)}
                     />
-                    solid
-                  </label>
-                  <label>
+                    <p>{bordervalue[0]}</p>
+                  </div>
+                  <div className="flex md:gap-2 gap-2 md:flex-row flex-col">
+                    <h3>Border Style</h3>
+                    <label>
+                      <input
+                        type="radio"
+                        name="style"
+                        value="solid"
+                        checked
+                        className="text-white"
+                        onChange={(e) => handleBordervalue(e, 1)}
+                      />
+                      solid
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="style"
+                        value="dotted"
+                        className="text-white"
+                        onChange={(e) => handleBordervalue(e, 1)}
+                      />
+                      dotted
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="style"
+                        value="dashed"
+                        className="text-white"
+                        onChange={(e) => handleBordervalue(e, 1)}
+                      />
+                      dashed
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="style"
+                        value="groove"
+                        className="text-white"
+                        onChange={(e) => handleBordervalue(e, 1)}
+                      />
+                      groove
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="style"
+                        value="double"
+                        className="text-white"
+                        onChange={(e) => handleBordervalue(e, 1)}
+                      />
+                      double
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="style"
+                        value="inset"
+                        className="text-white"
+                        onChange={(e) => handleBordervalue(e, 1)}
+                      />
+                      inset
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="style"
+                        value="outset"
+                        className="text-white"
+                        onChange={(e) => handleBordervalue(e, 1)}
+                      />
+                      outset
+                    </label>
+                    <p className="w-[100px] text-end">{bordervalue[1]}</p>
+                  </div>
+                  <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                    <h3>Border Color</h3>
                     <input
-                      type="radio"
-                      name="style"
-                      value="dotted"
-                      className="text-white"
-                      onChange={(e) => handleBordervalue(e, 1)}
+                      type="color"
+                      className="bg-transparent"
+                      onChange={(e) => handleBordervalue(e, 2)}
                     />
-                    dotted
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="style"
-                      value="dashed"
-                      className="text-white"
-                      onChange={(e) => handleBordervalue(e, 1)}
-                    />
-                    dashed
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="style"
-                      value="groove"
-                      className="text-white"
-                      onChange={(e) => handleBordervalue(e, 1)}
-                    />
-                    groove
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="style"
-                      value="double"
-                      className="text-white"
-                      onChange={(e) => handleBordervalue(e, 1)}
-                    />
-                    double
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="style"
-                      value="inset"
-                      className="text-white"
-                      onChange={(e) => handleBordervalue(e, 1)}
-                    />
-                    inset
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="style"
-                      value="outset"
-                      className="text-white"
-                      onChange={(e) => handleBordervalue(e, 1)}
-                    />
-                    outset
-                  </label>
-                  <p className="w-[100px] text-end">{bordervalue[1]}</p>
-                </div>
-                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>Border Color</h3>
-                  <input
-                    type="color"
-                    className="bg-transparent"
-                    onChange={(e) => handleBordervalue(e, 2)}
-                  />
-                  <p>{bordervalue[2]}</p>
+                    <p>{bordervalue[2]}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* border radius */}
 
-            <div className="border border-neutral-400  p-2 px-4 rounded-lg">
-              <h2 className="text-sm  text-neutral-300">Border Radius</h2>
-              <div className="flex gap-5">
-                <input
-                  defaultValue="0"
-                  type="range"
-                  min="0"
-                  max="50"
-                  step="1"
-                  onChange={handleborderradius}
-                />
-                <p>{borderradiusvalue}</p>
+            {param === "borderradius" && (
+              <div className="border border-neutral-400  p-2 px-4 rounded-lg">
+                <div className="flex  justify-between">
+                  <h2 className="text-sm  text-neutral-300">Border Radius</h2>
+                  <p>
+                    {click ? (
+                      <FaHeart onDoubleClick={handleDislike} />
+                    ) : (
+                      <CiHeart onDoubleClick={handleLike} />
+                    )}
+                  </p>
+                </div>{" "}
+                <div className="flex gap-5">
+                  <input
+                    defaultValue="0"
+                    type="range"
+                    min="0"
+                    max="50"
+                    step="1"
+                    onChange={handleborderradius}
+                  />
+                  <p>{borderradiusvalue}</p>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Outline */}
 
-            <div className="border border-neutral-400  p-2 px-4 rounded-lg pb-4">
-              <h2 className="text-sm  text-neutral-300">Outline</h2>
-              <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
-                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>Outline Width</h3>
-                  <input
-                    defaultValue="0"
-                    type="range"
-                    min="0"
-                    max="20"
-                    step="1"
-                    onChange={(e) => handleoutlinevalue(e, 0)}
-                  />
-                  <p>{outlinevalue[0]}</p>
-                </div>
-                <div className="flex md:gap-2 gap-2 md:flex-row flex-col">
-                  <h3>Outline Style</h3>
-                  <label>
+            {param === "outline" && (
+              <div className="border border-neutral-400  p-2 px-4 rounded-lg pb-4">
+                <div className="flex  justify-between">
+                  <h2 className="text-sm  text-neutral-300">Outline</h2>
+                  <p>
+                    {click ? (
+                      <FaHeart onDoubleClick={handleDislike} />
+                    ) : (
+                      <CiHeart onDoubleClick={handleLike} />
+                    )}
+                  </p>
+                </div>{" "}
+                <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
+                  <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                    <h3>Outline Width</h3>
                     <input
-                      type="radio"
-                      name="style"
-                      value="solid"
-                      checked
-                      className="text-white"
-                      onChange={(e) => handleoutlinevalue(e, 1)}
+                      defaultValue="0"
+                      type="range"
+                      min="0"
+                      max="20"
+                      step="1"
+                      onChange={(e) => handleoutlinevalue(e, 0)}
                     />
-                    solid
-                  </label>
-                  <label>
+                    <p>{outlinevalue[0]}</p>
+                  </div>
+                  <div className="flex md:gap-2 gap-2 md:flex-row flex-col">
+                    <h3>Outline Style</h3>
+                    <label>
+                      <input
+                        type="radio"
+                        name="style"
+                        value="solid"
+                        checked
+                        className="text-white"
+                        onChange={(e) => handleoutlinevalue(e, 1)}
+                      />
+                      solid
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="style"
+                        value="dotted"
+                        className="text-white"
+                        onChange={(e) => handleoutlinevalue(e, 1)}
+                      />
+                      dotted
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="style"
+                        value="dashed"
+                        className="text-white"
+                        onChange={(e) => handleoutlinevalue(e, 1)}
+                      />
+                      dashed
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="style"
+                        value="groove"
+                        className="text-white"
+                        onChange={(e) => handleoutlinevalue(e, 1)}
+                      />
+                      groove
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="style"
+                        value="double"
+                        className="text-white"
+                        onChange={(e) => handleoutlinevalue(e, 1)}
+                      />
+                      double
+                    </label>
+                    <p className="w-[100px] text-end">{outlinevalue[1]}</p>
+                  </div>
+                  <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                    <h3>Outline Color</h3>
                     <input
-                      type="radio"
-                      name="style"
-                      value="dotted"
-                      className="text-white"
-                      onChange={(e) => handleoutlinevalue(e, 1)}
+                      type="color"
+                      className="bg-transparent"
+                      onChange={(e) => handleoutlinevalue(e, 2)}
                     />
-                    dotted
-                  </label>
-                  <label>
+                    <p>{outlinevalue[2]}</p>
+                  </div>
+                  <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                    <h3>Outline Width</h3>
                     <input
-                      type="radio"
-                      name="style"
-                      value="dashed"
-                      className="text-white"
-                      onChange={(e) => handleoutlinevalue(e, 1)}
+                      defaultValue="0"
+                      type="range"
+                      min="0"
+                      max="30"
+                      step="1"
+                      onChange={(e) => handleoutlinevalue(e, 3)}
                     />
-                    dashed
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="style"
-                      value="groove"
-                      className="text-white"
-                      onChange={(e) => handleoutlinevalue(e, 1)}
-                    />
-                    groove
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="style"
-                      value="double"
-                      className="text-white"
-                      onChange={(e) => handleoutlinevalue(e, 1)}
-                    />
-                    double
-                  </label>
-                  <p className="w-[100px] text-end">{outlinevalue[1]}</p>
-                </div>
-                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>Outline Color</h3>
-                  <input
-                    type="color"
-                    className="bg-transparent"
-                    onChange={(e) => handleoutlinevalue(e, 2)}
-                  />
-                  <p>{outlinevalue[2]}</p>
-                </div>
-                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>Outline Width</h3>
-                  <input
-                    defaultValue="0"
-                    type="range"
-                    min="0"
-                    max="30"
-                    step="1"
-                    onChange={(e) => handleoutlinevalue(e, 3)}
-                  />
-                  <p>{outlinevalue[3]}</p>
+                    <p>{outlinevalue[3]}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* BORDER SHADOW */}
 
-            <div className="border border-neutral-400  p-2 px-4 rounded-lg pb-4">
-              <h2 className="text-sm  text-neutral-300">Box Shadow</h2>
-              <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
-                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>Horizontal shadow Length</h3>
-                  <input
-                    defaultValue="0"
-                    type="range"
-                    min="-200"
-                    max="200"
-                    step="1"
-                    onChange={(e) => handleBoxshadow(e, 0)}
-                  />
-                  <p>{boxshadow[0]}</p>
-                </div>
-                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>Vertical shadow Length</h3>
-                  <input
-                    defaultValue="0"
-                    type="range"
-                    min="-200"
-                    max="200"
-                    step="1"
-                    onChange={(e) => handleBoxshadow(e, 1)}
-                  />
-                  <p>{boxshadow[1]}</p>
-                </div>
-                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>Blur Radius</h3>
-                  <input
-                    defaultValue="0"
-                    type="range"
-                    min="0"
-                    max="50"
-                    step="1"
-                    onChange={(e) => handleBoxshadow(e, 2)}
-                  />
-                  <p>{boxshadow[2]}</p>
-                </div>
-                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>Spread</h3>
-                  <input
-                    type="range"
-                    min="0"
-                    max="50"
-                    className="bg-transparent"
-                    onChange={(e) => handleBoxshadow(e, 3)}
-                  />
-                  <p>{boxshadow[3]}</p>
-                </div>
-                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>Color</h3>
-                  <input
-                    type="color"
-                    className="bg-transparent"
-                    onChange={(e) => handleBoxshadow(e, 4)}
-                  />
-                  <p>{boxshadow[4]}</p>
+            {param === "shadow" && (
+              <div className="border border-neutral-400  p-2 px-4 rounded-lg pb-4">
+                <div className="flex  justify-between">
+                  <h2 className="text-sm  text-neutral-300">Border Shadow</h2>
+                  <p>
+                    {click ? (
+                      <FaHeart onDoubleClick={handleDislike} />
+                    ) : (
+                      <CiHeart onDoubleClick={handleLike} />
+                    )}
+                  </p>
+                </div>{" "}
+                <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
+                  <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                    <h3>Horizontal shadow Length</h3>
+                    <input
+                      defaultValue="0"
+                      type="range"
+                      min="-200"
+                      max="200"
+                      step="1"
+                      onChange={(e) => handleBoxshadow(e, 0)}
+                    />
+                    <p>{boxshadow[0]}</p>
+                  </div>
+                  <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                    <h3>Vertical shadow Length</h3>
+                    <input
+                      defaultValue="0"
+                      type="range"
+                      min="-200"
+                      max="200"
+                      step="1"
+                      onChange={(e) => handleBoxshadow(e, 1)}
+                    />
+                    <p>{boxshadow[1]}</p>
+                  </div>
+                  <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                    <h3>Blur Radius</h3>
+                    <input
+                      defaultValue="0"
+                      type="range"
+                      min="0"
+                      max="50"
+                      step="1"
+                      onChange={(e) => handleBoxshadow(e, 2)}
+                    />
+                    <p>{boxshadow[2]}</p>
+                  </div>
+                  <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                    <h3>Spread</h3>
+                    <input
+                      type="range"
+                      min="0"
+                      max="50"
+                      className="bg-transparent"
+                      onChange={(e) => handleBoxshadow(e, 3)}
+                    />
+                    <p>{boxshadow[3]}</p>
+                  </div>
+                  <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                    <h3>Color</h3>
+                    <input
+                      type="color"
+                      className="bg-transparent"
+                      onChange={(e) => handleBoxshadow(e, 4)}
+                    />
+                    <p>{boxshadow[4]}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -366,38 +450,46 @@ const Boxprop = () => {
               <h2>Code</h2>
             </div>
             <div className="p-2 px-4">
-              <p>
-                border:{" "}
-                <span className="text-[#15F5BA]">
-                  {bordervalue[0]}px {bordervalue[1]} {bordervalue[2]}
-                </span>
-                ;
-              </p>
-              <p>
-                border-radius:{" "}
-                <span className="text-[#15F5BA]">{borderradiusvalue}px</span>;
-              </p>
-              <p>
-                outline:{" "}
-                <span className="text-[#15F5BA]">
-                  {outlinevalue[0]}px {outlinevalue[1]} {outlinevalue[2]}
-                </span>
-                ;
-              </p>
+              {param === "border" && (
+                <p>
+                  border:{" "}
+                  <span className="text-[#15F5BA]">
+                    {bordervalue[0]}px {bordervalue[1]} {bordervalue[2]}
+                  </span>
+                  ;
+                </p>
+              )}
+              {param === "borderradius" && (
+                <p>
+                  border-radius:{" "}
+                  <span className="text-[#15F5BA]">{borderradiusvalue}px</span>;
+                </p>
+              )}
+              {param === "outline" && (
+                <p>
+                  outline:{" "}
+                  <span className="text-[#15F5BA]">
+                    {outlinevalue[0]}px {outlinevalue[1]} {outlinevalue[2]}
+                  </span>
+                  ;
+                </p>
+              )}
               {outlinevalue[3] !== 0 ? (
                 <p>
                   outline-offset:{" "}
                   <span className="text-[#15F5BA]">{outlinevalue[3]}</span>
                 </p>
               ) : null}
-              <p>
-                box-shadow:{" "}
-                <span className="text-[#15F5BA]">
-                  {boxshadow[0]}px {boxshadow[1]}px {boxshadow[2]}px{" "}
-                  {boxshadow[3]}px {boxshadow[4]}
-                </span>
-                ;
-              </p>
+              {param === "shadow" && (
+                <p>
+                  box-shadow:{" "}
+                  <span className="text-[#15F5BA]">
+                    {boxshadow[0]}px {boxshadow[1]}px {boxshadow[2]}px{" "}
+                    {boxshadow[3]}px {boxshadow[4]}
+                  </span>
+                  ;
+                </p>
+              )}
             </div>
           </div>
         </div>

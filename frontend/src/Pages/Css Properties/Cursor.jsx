@@ -1,11 +1,15 @@
 // import { data } from "autoprefixer";
 // import axios from "axios";
+import axios from "axios";
 import React, { useContext, useState } from "react";
-// import { UserContext } from "../../Context/UserContext";
-// import { FaCarTunnel } from "react-icons/fa6";
+import { UserContext } from "../../Context/UserContext";
+import { FaHeart } from "react-icons/fa";
+import { CiHeart } from "react-icons/ci";
 
 const Cursor = () => {
   const [cursor, setCursor] = useState("auto");
+  const [click, setClick] = useState(false);
+  const user = useContext(UserContext);
 
   // const cart = useContext(UserContext);
 
@@ -14,6 +18,31 @@ const Cursor = () => {
     const value = e.target.value;
     setCursor(value);
   };
+
+  const handleLike = async () => {
+    const res = await axios.put("http://localhost:8000/api/user/addcart", {
+      data: {
+        cssName: param,
+        email: user.userEmail,
+      },
+    });
+    // console.log(res);
+    setClick(true);
+  };
+
+  const handleDislike = async () => {
+    const res = await axios.delete(
+      "http://localhost:8000/api/user/removecart",
+      {
+        data: {
+          cssName: param,
+          email: user.userEmail,
+        },
+      }
+    );
+    setClick(false);
+  };
+
   const handleHoverIn = (e) => {
     const newCursor = document.getElementsByClassName("cursor");
     newCursor[0].style.cursor = cursor;
@@ -22,23 +51,6 @@ const Cursor = () => {
     const newCursor = document.getElementsByClassName("cursor");
     newCursor[0].style.cursor = "auto";
   };
-
-  // const addtocart = async (e) => {
-  //   try {
-  //     console.log(cart.userEmail);
-  //     const res = await axios.put("http://localhost:8000/api/user/add", {
-  //       data: {
-  //         email: cart.userEmail,
-  //         cssName: "cursor",
-  //       },
-  //     });
-  //     alert("Added");
-  //     // cart.setUserCart((prev) => [...prev, "cursor"]);
-  //     // cart.setIsCart(true);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   return (
     <section className="text-white bg-[#0F0F0F] md:h-full">
@@ -55,7 +67,16 @@ const Cursor = () => {
 
           <div className="md:px-7 px-4 flex gap-3 flex-col">
             <div className="border p-2 px-4 rounded-lg css_prop">
-              <h2 className="text-sm  text-neutral-300">Cursor</h2>
+              <div className="flex  justify-between">
+                <h2 className="text-sm  text-neutral-300">Cursor</h2>
+                <p>
+                  {click ? (
+                    <FaHeart onDoubleClick={handleDislike} />
+                  ) : (
+                    <CiHeart onDoubleClick={handleLike} />
+                  )}
+                </p>
+              </div>{" "}
               <div className="flex gap-5">
                 <select
                   name="list-style"

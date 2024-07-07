@@ -1,12 +1,51 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { FaHeart } from "react-icons/fa";
+import { CiHeart } from "react-icons/ci";
+import axios from "axios";
+import { UserContext } from "../../Context/UserContext";
 
 const Textprop = () => {
+  const [click, setClick] = useState(false);
   const [textsize, setTextsize] = useState(100);
   const [letterspacing, setLetterspacing] = useState(0);
   const [color, setColor] = useState("#fff");
   const [weight, setWeight] = useState(100);
-
   const [textshadow, setTextshadow] = useState([0, 0, 0, "#000"]);
+
+  const [param, setParam] = useState();
+  const parameter = useParams();
+
+  const user = useContext(UserContext);
+
+  useEffect(() => {
+    setParam(parameter.textId);
+    // console.log(parameter);
+  }, [parameter]);
+
+  const handleLike = async () => {
+    const res = await axios.put("http://localhost:8000/api/user/addcart", {
+      data: {
+        cssName: param,
+        email: user.userEmail,
+      },
+    });
+    // console.log(res);
+    setClick(true);
+  };
+
+  const handleDislike = async () => {
+    const res = await axios.delete(
+      "http://localhost:8000/api/user/removecart",
+      {
+        data: {
+          cssName: param,
+          email: user.userEmail,
+        },
+      }
+    );
+    setClick(false);
+  };
 
   const handleTextSize = (e) => {
     e.preventDefault();
@@ -70,122 +109,176 @@ const Textprop = () => {
           {/* Text SIZE */}
 
           <div className="md:px-7 px-4 flex gap-3 flex-col">
-            <div className="border p-2 px-4 rounded-lg">
-              <h2 className="text-sm  text-neutral-300">Text Size</h2>
-              <div className="flex gap-5">
-                <input
-                  defaultValue="100"
-                  type="range"
-                  min="11"
-                  max="200"
-                  step="1"
-                  onChange={handleTextSize}
-                />
-                <p>{textsize}</p>
+            {param === "textsize" && (
+              <div className="border p-2 px-4 rounded-lg">
+                <div className="flex  justify-between">
+                  <h2 className="text-sm  text-neutral-300">Text Size</h2>
+                  <p>
+                    {click ? (
+                      <FaHeart onDoubleClick={handleDislike} />
+                    ) : (
+                      <CiHeart onDoubleClick={handleLike} />
+                    )}
+                  </p>
+                </div>
+                <div className="flex gap-5">
+                  <input
+                    defaultValue="100"
+                    type="range"
+                    min="11"
+                    max="200"
+                    step="1"
+                    onChange={handleTextSize}
+                  />
+                  <p>{textsize}</p>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* LETTER SPACING */}
 
-            <div className="border p-2 px-4 rounded-lg">
-              <h2 className="text-sm  text-neutral-300">Letter Spacing</h2>
-              <div className="flex gap-5">
-                <input
-                  defaultValue="0"
-                  type="range"
-                  min="11"
-                  max="50"
-                  step="1"
-                  onChange={handleLetterspacing}
-                />
-                <p>{letterspacing}</p>
+            {param === "letterspacing" && (
+              <div className="border p-2 px-4 rounded-lg">
+                <div className="flex  justify-between">
+                  <h2 className="text-sm  text-neutral-300">Letter Spacing</h2>
+                  <p>
+                    {click ? (
+                      <FaHeart onDoubleClick={handleDislike} />
+                    ) : (
+                      <CiHeart onDoubleClick={handleLike} />
+                    )}
+                  </p>
+                </div>
+                <div className="flex gap-5">
+                  <input
+                    defaultValue="0"
+                    type="range"
+                    min="11"
+                    max="50"
+                    step="1"
+                    onChange={handleLetterspacing}
+                  />
+                  <p>{letterspacing}</p>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* COLOR PICKER */}
 
-            <div className="border p-2 px-4 rounded-lg">
-              <h2 className="text-sm  text-neutral-300">Text Color</h2>
-              <div className="flex gap-5">
-                <input
-                  type="color"
-                  onChange={handleColors}
-                  className="bg-transparent"
-                  value={color}
-                />
-                <p>{color}</p>
+            {param === "color" && (
+              <div className="border p-2 px-4 rounded-lg">
+                <div className="flex  justify-between">
+                  <h2 className="text-sm  text-neutral-300">Text Color</h2>
+                  <p>
+                    {click ? (
+                      <FaHeart onDoubleClick={handleDislike} />
+                    ) : (
+                      <CiHeart onDoubleClick={handleLike} />
+                    )}
+                  </p>
+                </div>
+                <div className="flex gap-5">
+                  <input
+                    type="color"
+                    onChange={handleColors}
+                    className="bg-transparent"
+                    value={color}
+                  />
+                  <p>{color}</p>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Text Weight */}
 
-            <div className="border p-2 px-4 rounded-lg">
-              <h2 className="text-sm  text-neutral-300">Font Weight</h2>
-              <div className="flex gap-5">
-                <input
-                  defaultValue="100"
-                  type="range"
-                  min="100"
-                  max="900"
-                  step="100"
-                  onChange={handletextweight}
-                />
-                <p>{weight}</p>
+            {param === "weight" && (
+              <div className="border p-2 px-4 rounded-lg">
+                <div className="flex  justify-between">
+                  <h2 className="text-sm  text-neutral-300">Font Weight</h2>
+                  <p>
+                    {click ? (
+                      <FaHeart onDoubleClick={handleDislike} />
+                    ) : (
+                      <CiHeart onDoubleClick={handleLike} />
+                    )}
+                  </p>
+                </div>
+                <div className="flex gap-5">
+                  <input
+                    defaultValue="100"
+                    type="range"
+                    min="100"
+                    max="900"
+                    step="100"
+                    onChange={handletextweight}
+                  />
+                  <p>{weight}</p>
+                </div>
               </div>
-            </div>
-
+            )}
             {/* TEXT SHADOW */}
 
-            <div className="border p-2 px-4 rounded-lg pb-4">
-              <h2 className="text-sm  text-neutral-300">Text Shadow</h2>
-              <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
-                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>Horizontal shadow Length</h3>
-                  <input
-                    defaultValue="0"
-                    type="range"
-                    min="-200"
-                    max="200"
-                    step="1"
-                    onChange={(e) => handleTextshadow(e, 0)}
-                  />
-                  <p>{textshadow[0]}</p>
+            {param === "shadow" && (
+              <div className="border p-2 px-4 rounded-lg pb-4">
+                <div className="flex  justify-between">
+                  <h2 className="text-sm  text-neutral-300">Text Shadow</h2>
+                  <p>
+                    {click ? (
+                      <FaHeart onDoubleClick={handleDislike} />
+                    ) : (
+                      <CiHeart onDoubleClick={handleLike} />
+                    )}
+                  </p>
                 </div>
-                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>Vertical shadow Length</h3>
-                  <input
-                    defaultValue="0"
-                    type="range"
-                    min="-200"
-                    max="200"
-                    step="1"
-                    onChange={(e) => handleTextshadow(e, 1)}
-                  />
-                  <p>{textshadow[1]}</p>
-                </div>
-                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>Blur Radius</h3>
-                  <input
-                    defaultValue="0"
-                    type="range"
-                    min="0"
-                    max="50"
-                    step="1"
-                    onChange={(e) => handleTextshadow(e, 2)}
-                  />
-                  <p>{textshadow[2]}</p>
-                </div>
-                <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
-                  <h3>shadow Color</h3>
-                  <input
-                    type="color"
-                    className="bg-transparent"
-                    onChange={(e) => handleTextshadow(e, 3)}
-                  />
-                  <p>{textshadow[3]}</p>
+                <div className="border border-[#a2a2a2] p-2 px-4 mt-2 rounded-lg flex flex-col gap-5">
+                  <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                    <h3>Horizontal shadow Length</h3>
+                    <input
+                      defaultValue="0"
+                      type="range"
+                      min="-200"
+                      max="200"
+                      step="1"
+                      onChange={(e) => handleTextshadow(e, 0)}
+                    />
+                    <p>{textshadow[0]}</p>
+                  </div>
+                  <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                    <h3>Vertical shadow Length</h3>
+                    <input
+                      defaultValue="0"
+                      type="range"
+                      min="-200"
+                      max="200"
+                      step="1"
+                      onChange={(e) => handleTextshadow(e, 1)}
+                    />
+                    <p>{textshadow[1]}</p>
+                  </div>
+                  <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                    <h3>Blur Radius</h3>
+                    <input
+                      defaultValue="0"
+                      type="range"
+                      min="0"
+                      max="50"
+                      step="1"
+                      onChange={(e) => handleTextshadow(e, 2)}
+                    />
+                    <p>{textshadow[2]}</p>
+                  </div>
+                  <div className="flex md:gap-5 gap-2 md:flex-row flex-col">
+                    <h3>shadow Color</h3>
+                    <input
+                      type="color"
+                      className="bg-transparent"
+                      onChange={(e) => handleTextshadow(e, 3)}
+                    />
+                    <p>{textshadow[3]}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -203,27 +296,38 @@ const Textprop = () => {
               <h2>Code</h2>
             </div>
             <div className="p-2 px-4">
-              <p>
-                font-size: <span className="text-[#15F5BA]">{textsize}px</span>;
-              </p>
-              <p>
-                letter-spacing:{" "}
-                <span className="text-[#15F5BA]">{letterspacing}px</span>;
-              </p>
-              <p>
-                color: <span className="text-[#15F5BA]">{color}</span>;
-              </p>
-              <p>
-                font-weight: <span className="text-[#15F5BA]">{weight}</span>;
-              </p>
-              <p>
-                text-shadow:{" "}
-                <span className="text-[#15F5BA]">
-                  {textshadow[0]}px {textshadow[1]}px {textshadow[2]}
-                  px {textshadow[3]}
-                </span>
-                ;
-              </p>
+              {param === "textsize" && (
+                <p>
+                  font-size:{" "}
+                  <span className="text-[#15F5BA]">{textsize}px</span>;
+                </p>
+              )}
+              {param === "letterspacing" && (
+                <p>
+                  letter-spacing:{" "}
+                  <span className="text-[#15F5BA]">{letterspacing}px</span>;
+                </p>
+              )}
+              {param === "color" && (
+                <p>
+                  color: <span className="text-[#15F5BA]">{color}</span>;
+                </p>
+              )}
+              {param === "weight" && (
+                <p>
+                  font-weight: <span className="text-[#15F5BA]">{weight}</span>;
+                </p>
+              )}
+              {param === "shadow" && (
+                <p>
+                  text-shadow:{" "}
+                  <span className="text-[#15F5BA]">
+                    {textshadow[0]}px {textshadow[1]}px {textshadow[2]}
+                    px {textshadow[3]}
+                  </span>
+                  ;
+                </p>
+              )}
             </div>
           </div>
         </div>

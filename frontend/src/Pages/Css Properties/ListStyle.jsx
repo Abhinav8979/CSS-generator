@@ -1,8 +1,47 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Mouse from "../../Utils/Mouse";
+import { FaHeart } from "react-icons/fa";
+import { CiHeart } from "react-icons/ci";
+import { useParams } from "react-router";
+import { UserContext } from "../../Context/UserContext";
 
 const ListStyle = () => {
   const [listStyle, setListStyle] = useState("disc");
+  const [click, setClick] = useState(false);
+
+  const [param, setParam] = useState();
+  const parameter = useParams();
+
+  const user = useContext(UserContext);
+
+  useEffect(() => {
+    setParam(parameter.textId);
+    // console.log(parameter);
+  }, [parameter]);
+
+  const handleLike = async () => {
+    const res = await axios.put("http://localhost:8000/api/user/addcart", {
+      data: {
+        cssName: param,
+        email: user.userEmail,
+      },
+    });
+    // console.log(res);
+    setClick(true);
+  };
+
+  const handleDislike = async () => {
+    const res = await axios.delete(
+      "http://localhost:8000/api/user/removecart",
+      {
+        data: {
+          cssName: param,
+          email: user.userEmail,
+        },
+      }
+    );
+    setClick(false);
+  };
 
   const handleListStyle = (e) => {
     e.preventDefault();
@@ -27,7 +66,16 @@ const ListStyle = () => {
 
             <div className="md:px-7 px-4 flex gap-3 flex-col">
               <div className="border p-2 px-4 rounded-lg css_prop">
-                <h2 className="text-sm  text-neutral-300">List style</h2>
+                <div className="flex  justify-between">
+                  <h2 className="text-sm  text-neutral-300">List Style</h2>
+                  <p>
+                    {click ? (
+                      <FaHeart onDoubleClick={handleDislike} />
+                    ) : (
+                      <CiHeart onDoubleClick={handleLike} />
+                    )}
+                  </p>
+                </div>{" "}
                 <div className="flex gap-5">
                   <select
                     name="list-style"

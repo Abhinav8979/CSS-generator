@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { UserContext } from "../../Context/UserContext";
+import { FaHeart } from "react-icons/fa";
+import { CiHeart } from "react-icons/ci";
 
 const Filter = () => {
   const [blur, setBlur] = useState(0);
@@ -9,6 +13,41 @@ const Filter = () => {
   const [huerotate, setHuerotate] = useState(0);
   const [sepia, setSepia] = useState(0);
   const [invert, setInvert] = useState(0);
+  const [click, setClick] = useState(false);
+
+  const [param, setParam] = useState();
+  const parameter = useParams();
+
+  const user = useContext(UserContext);
+
+  useEffect(() => {
+    setParam(parameter.filterId);
+    // console.log(parameter);
+  }, [parameter]);
+
+  const handleLike = async () => {
+    const res = await axios.put("http://localhost:8000/api/user/addcart", {
+      data: {
+        cssName: param,
+        email: user.userEmail,
+      },
+    });
+    // console.log(res);
+    setClick(true);
+  };
+
+  const handleDislike = async () => {
+    const res = await axios.delete(
+      "http://localhost:8000/api/user/removecart",
+      {
+        data: {
+          cssName: param,
+          email: user.userEmail,
+        },
+      }
+    );
+    setClick(false);
+  };
 
   const handleBlur = (e) => {
     e.preventDefault();
@@ -81,162 +120,250 @@ const Filter = () => {
 
           {/* BLUR */}
           <div id="filter" className="flex flex-col gap-5 ">
-            <div className="md:px-7 px-4 flex gap-3 flex-col">
-              <div className="border p-2 px-4 rounded-lg css_prop">
-                <h2 className="text-sm  text-neutral-300">Blur</h2>
-                <div className="flex gap-5">
-                  <input
-                    defaultValue="100"
-                    type="range"
-                    min="0"
-                    max="50"
-                    step="1"
-                    value={blur}
-                    onChange={handleBlur}
-                  />
-                  <p>{blur}</p>
+            {param === "blur" && (
+              <div className="md:px-7 px-4 flex gap-3 flex-col">
+                <div className="border p-2 px-4 rounded-lg css_prop">
+                  <div className="flex  justify-between">
+                    <h2 className="text-sm  text-neutral-300">Blur</h2>
+                    <p>
+                      {click ? (
+                        <FaHeart onDoubleClick={handleDislike} />
+                      ) : (
+                        <CiHeart onDoubleClick={handleLike} />
+                      )}
+                    </p>
+                  </div>{" "}
+                  <div className="flex gap-5">
+                    <input
+                      defaultValue="100"
+                      type="range"
+                      min="0"
+                      max="50"
+                      step="1"
+                      value={blur}
+                      onChange={handleBlur}
+                    />
+                    <p>{blur}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* Saturation */}
 
-            <div className="md:px-7 px-4 flex gap-3 flex-col">
-              <div className="border p-2 px-4 rounded-lg css_prop">
-                <h2 className="text-sm  text-neutral-300">Saturate</h2>
-                <div className="flex gap-5">
-                  <input
-                    defaultValue="100"
-                    type="range"
-                    min="1"
-                    max="300"
-                    step="1"
-                    value={saturate}
-                    onChange={handleSaturate}
-                  />
-                  <p>{saturate}</p>
+            {param === "saturate" && (
+              <div className="md:px-7 px-4 flex gap-3 flex-col">
+                <div className="border p-2 px-4 rounded-lg css_prop">
+                  <div className="flex  justify-between">
+                    <h2 className="text-sm  text-neutral-300">Saturate</h2>
+                    <p>
+                      {click ? (
+                        <FaHeart onDoubleClick={handleDislike} />
+                      ) : (
+                        <CiHeart onDoubleClick={handleLike} />
+                      )}
+                    </p>
+                  </div>{" "}
+                  <div className="flex gap-5">
+                    <input
+                      defaultValue="100"
+                      type="range"
+                      min="1"
+                      max="300"
+                      step="1"
+                      value={saturate}
+                      onChange={handleSaturate}
+                    />
+                    <p>{saturate}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* Brightness */}
 
-            <div className="md:px-7 px-4 flex gap-3 flex-col">
-              <div className="border p-2 px-4 rounded-lg css_prop">
-                <h2 className="text-sm  text-neutral-300">Brightness</h2>
-                <div className="flex gap-5">
-                  <input
-                    defaultValue="100"
-                    type="range"
-                    min="1"
-                    max="300"
-                    step="1"
-                    value={brightness}
-                    onChange={handleBrightness}
-                  />
-                  <p>{brightness}</p>
+            {param === "brightness" && (
+              <div className="md:px-7 px-4 flex gap-3 flex-col">
+                <div className="border p-2 px-4 rounded-lg css_prop">
+                  <div className="flex  justify-between">
+                    <h2 className="text-sm  text-neutral-300">Brightness</h2>
+                    <p>
+                      {click ? (
+                        <FaHeart onDoubleClick={handleDislike} />
+                      ) : (
+                        <CiHeart onDoubleClick={handleLike} />
+                      )}
+                    </p>
+                  </div>{" "}
+                  <div className="flex gap-5">
+                    <input
+                      defaultValue="100"
+                      type="range"
+                      min="1"
+                      max="300"
+                      step="1"
+                      value={brightness}
+                      onChange={handleBrightness}
+                    />
+                    <p>{brightness}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* Contrast */}
 
-            <div className="md:px-7 px-4 flex gap-3 flex-col">
-              <div className="border p-2 px-4 rounded-lg css_prop">
-                <h2 className="text-sm  text-neutral-300">Contrast</h2>
-                <div className="flex gap-5">
-                  <input
-                    defaultValue="100"
-                    type="range"
-                    min="1"
-                    max="200"
-                    step="1"
-                    value={contrast}
-                    onChange={handleContrast}
-                  />
-                  <p>{contrast}</p>
+            {param === "contrast" && (
+              <div className="md:px-7 px-4 flex gap-3 flex-col">
+                <div className="border p-2 px-4 rounded-lg css_prop">
+                  <div className="flex  justify-between">
+                    <h2 className="text-sm  text-neutral-300">Contrast</h2>
+                    <p>
+                      {click ? (
+                        <FaHeart onDoubleClick={handleDislike} />
+                      ) : (
+                        <CiHeart onDoubleClick={handleLike} />
+                      )}
+                    </p>
+                  </div>{" "}
+                  <div className="flex gap-5">
+                    <input
+                      defaultValue="100"
+                      type="range"
+                      min="1"
+                      max="200"
+                      step="1"
+                      value={contrast}
+                      onChange={handleContrast}
+                    />
+                    <p>{contrast}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* Grayscale */}
 
-            <div className="md:px-7 px-4 flex gap-3 flex-col">
-              <div className="border p-2 px-4 rounded-lg css_prop">
-                <h2 className="text-sm  text-neutral-300">Grayscale</h2>
-                <div className="flex gap-5">
-                  <input
-                    defaultValue="100"
-                    type="range"
-                    min="1"
-                    max="100"
-                    step="1"
-                    value={grayscale}
-                    onChange={handleGrayscale}
-                  />
-                  <p>{grayscale}</p>
+            {param === "grayscale" && (
+              <div className="md:px-7 px-4 flex gap-3 flex-col">
+                <div className="border p-2 px-4 rounded-lg css_prop">
+                  <div className="flex  justify-between">
+                    <h2 className="text-sm  text-neutral-300">Grayscale</h2>
+                    <p>
+                      {click ? (
+                        <FaHeart onDoubleClick={handleDislike} />
+                      ) : (
+                        <CiHeart onDoubleClick={handleLike} />
+                      )}
+                    </p>
+                  </div>{" "}
+                  <div className="flex gap-5">
+                    <input
+                      defaultValue="100"
+                      type="range"
+                      min="1"
+                      max="100"
+                      step="1"
+                      value={grayscale}
+                      onChange={handleGrayscale}
+                    />
+                    <p>{grayscale}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* hue rotate */}
-            <div className="md:px-7 px-4 flex gap-3 flex-col">
-              <div className="border p-2 px-4 rounded-lg css_prop">
-                <h2 className="text-sm  text-neutral-300">Hue Rotate</h2>
-                <div className="flex gap-5">
-                  <input
-                    defaultValue="100"
-                    type="range"
-                    min="1"
-                    max="360"
-                    step="1"
-                    value={huerotate}
-                    onChange={handleHuerotate}
-                  />
-                  <p>{huerotate}</p>
+            {param === "huerotate" && (
+              <div className="md:px-7 px-4 flex gap-3 flex-col">
+                <div className="border p-2 px-4 rounded-lg css_prop">
+                  <div className="flex  justify-between">
+                    <h2 className="text-sm  text-neutral-300">Hue Rotate</h2>
+                    <p>
+                      {click ? (
+                        <FaHeart onDoubleClick={handleDislike} />
+                      ) : (
+                        <CiHeart onDoubleClick={handleLike} />
+                      )}
+                    </p>
+                  </div>{" "}
+                  <div className="flex gap-5">
+                    <input
+                      defaultValue="100"
+                      type="range"
+                      min="1"
+                      max="360"
+                      step="1"
+                      value={huerotate}
+                      onChange={handleHuerotate}
+                    />
+                    <p>{huerotate}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* sepia */}
 
-            <div className="md:px-7 px-4 flex gap-3 flex-col">
-              <div className="border p-2 px-4 rounded-lg css_prop">
-                <h2 className="text-sm  text-neutral-300">Sepia</h2>
-                <div className="flex gap-5">
-                  <input
-                    defaultValue="100"
-                    type="range"
-                    min="1"
-                    max="100"
-                    step="1"
-                    value={sepia}
-                    onChange={handleSepia}
-                  />
-                  <p>{sepia}</p>
+            {param === "sepia" && (
+              <div className="md:px-7 px-4 flex gap-3 flex-col">
+                <div className="border p-2 px-4 rounded-lg css_prop">
+                  <div className="flex  justify-between">
+                    <h2 className="text-sm  text-neutral-300">Sepia</h2>
+                    <p>
+                      {click ? (
+                        <FaHeart onDoubleClick={handleDislike} />
+                      ) : (
+                        <CiHeart onDoubleClick={handleLike} />
+                      )}
+                    </p>
+                  </div>{" "}
+                  <div className="flex gap-5">
+                    <input
+                      defaultValue="100"
+                      type="range"
+                      min="1"
+                      max="100"
+                      step="1"
+                      value={sepia}
+                      onChange={handleSepia}
+                    />
+                    <p>{sepia}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* invert */}
 
-            <div className="md:px-7 px-4 flex gap-3 flex-col ">
-              <div className="border p-2 px-4 rounded-lg  css_prop">
-                <h2 className="text-sm  text-neutral-300 ">Invert</h2>
-                <div className="flex gap-5">
-                  <input
-                    defaultValue="100"
-                    type="range"
-                    min="1"
-                    max="100"
-                    step="1"
-                    value={invert}
-                    onChange={handleInvert}
-                  />
-                  <p>{invert}</p>
+            {param === "invert" && (
+              <div className="md:px-7 px-4 flex gap-3 flex-col ">
+                <div className="border p-2 px-4 rounded-lg  css_prop">
+                  <div className="flex  justify-between">
+                    <h2 className="text-sm  text-neutral-300">Invert</h2>
+                    <p>
+                      {click ? (
+                        <FaHeart onDoubleClick={handleDislike} />
+                      ) : (
+                        <CiHeart onDoubleClick={handleLike} />
+                      )}
+                    </p>
+                  </div>{" "}
+                  <div className="flex gap-5">
+                    <input
+                      defaultValue="100"
+                      type="range"
+                      min="1"
+                      max="100"
+                      step="1"
+                      value={invert}
+                      onChange={handleInvert}
+                    />
+                    <p>{invert}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -260,42 +387,63 @@ const Filter = () => {
               <h2>Code</h2>
             </div>
             <div className="p-2 px-4">
-              <p>
-                filter: <span className="text-[#15F5BA]"> blur({blur}px)</span>;
-              </p>
-              <p>
-                filter:{" "}
-                <span className="text-[#15F5BA]">saturate({saturate}%)</span>;
-              </p>
-              <p>
-                filter:{" "}
-                <span className="text-[#15F5BA]">
-                  brightness({brightness}%)
-                </span>
-                ;
-              </p>
-              <p>
-                filter:{" "}
-                <span className="text-[#15F5BA]">contrast({contrast}%);</span>
-              </p>
-              <p>
-                filter:{" "}
-                <span className="text-[#15F5BA]">grayscale({grayscale}%)</span>;
-              </p>
-              <p>
-                filter:{" "}
-                <span className="text-[#15F5BA]">
-                  hue-rotate({huerotate}deg)
-                </span>
-                ;
-              </p>
-              <p>
-                filter: <span className="text-[#15F5BA]">sepia({sepia}%)</span>;
-              </p>
-              <p>
-                filter:{" "}
-                <span className="text-[#15F5BA]">invert({invert}%)</span>;
-              </p>
+              {param === "blur" && (
+                <p>
+                  filter:{" "}
+                  <span className="text-[#15F5BA]"> blur({blur}px)</span>;
+                </p>
+              )}
+              {param === "saturate" && (
+                <p>
+                  filter:{" "}
+                  <span className="text-[#15F5BA]">saturate({saturate}%)</span>;
+                </p>
+              )}
+              {param === "brightness" && (
+                <p>
+                  filter:{" "}
+                  <span className="text-[#15F5BA]">
+                    brightness({brightness}%)
+                  </span>
+                  ;
+                </p>
+              )}
+              {param === "contrast" && (
+                <p>
+                  filter:{" "}
+                  <span className="text-[#15F5BA]">contrast({contrast}%);</span>
+                </p>
+              )}
+              {param === "grayscale" && (
+                <p>
+                  filter:{" "}
+                  <span className="text-[#15F5BA]">
+                    grayscale({grayscale}%)
+                  </span>
+                  ;
+                </p>
+              )}
+              {param === "huerotate" && (
+                <p>
+                  filter:{" "}
+                  <span className="text-[#15F5BA]">
+                    hue-rotate({huerotate}deg)
+                  </span>
+                  ;
+                </p>
+              )}
+              {param === "sepia" && (
+                <p>
+                  filter:{" "}
+                  <span className="text-[#15F5BA]">sepia({sepia}%)</span>;
+                </p>
+              )}
+              {param === "invert" && (
+                <p>
+                  filter:{" "}
+                  <span className="text-[#15F5BA]">invert({invert}%)</span>;
+                </p>
+              )}
             </div>
           </div>
         </div>
