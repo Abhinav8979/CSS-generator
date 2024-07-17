@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import { UserContext } from "../../Context/UserContext";
 import { FaHeart } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
+import axios from "axios";
 
 const Filter = () => {
   const [blur, setBlur] = useState(0);
@@ -22,17 +23,17 @@ const Filter = () => {
 
   useEffect(() => {
     setParam(parameter.filterId);
-    // console.log(parameter);
+    setClick(user.isItemInCart(parameter.filterId));
   }, [parameter]);
 
   const handleLike = async () => {
     const res = await axios.put("http://localhost:8000/api/user/addcart", {
       data: {
         cssName: param,
-        email: user.userEmail,
+        email: localStorage.getItem("user"),
       },
     });
-    // console.log(res);
+    user.setCartLen((prev) => prev + 1);
     setClick(true);
   };
 
@@ -42,10 +43,11 @@ const Filter = () => {
       {
         data: {
           cssName: param,
-          email: user.userEmail,
+          email: localStorage.getItem("user"),
         },
       }
     );
+    user.setCartLen((prev) => prev - 1);
     setClick(false);
   };
 

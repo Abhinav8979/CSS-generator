@@ -19,17 +19,19 @@ const Boxprop = () => {
 
   useEffect(() => {
     setParam(parameter.boxId);
-    console.log(parameter);
+    setClick(user.isItemInCart(parameter.boxId));
+    // console.log(parameter);
   }, [parameter]);
 
   const handleLike = async () => {
     const res = await axios.put("http://localhost:8000/api/user/addcart", {
       data: {
         cssName: param,
-        email: user.userEmail,
+        email: localStorage.getItem("user"),
       },
     });
     // console.log(res);
+    user.setCartLen((prev) => prev + 1);
     setClick(true);
   };
 
@@ -39,10 +41,11 @@ const Boxprop = () => {
       {
         data: {
           cssName: param,
-          email: user.userEmail,
+          email: localStorage.getItem("user"),
         },
       }
     );
+    user.setCartLen((prev) => prev - 1);
     setClick(false);
   };
 
@@ -360,7 +363,7 @@ const Boxprop = () => {
 
             {/* BORDER SHADOW */}
 
-            {param === "shadow" && (
+            {param === "boxshadow" && (
               <div className="border border-neutral-400  p-2 px-4 rounded-lg pb-4">
                 <div className="flex  justify-between">
                   <h2 className="text-sm  text-neutral-300">Border Shadow</h2>
@@ -480,7 +483,7 @@ const Boxprop = () => {
                   <span className="text-[#15F5BA]">{outlinevalue[3]}</span>
                 </p>
               ) : null}
-              {param === "shadow" && (
+              {param === "bordershadow" && (
                 <p>
                   box-shadow:{" "}
                   <span className="text-[#15F5BA]">

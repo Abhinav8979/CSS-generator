@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { IoArrowBackOutline } from "react-icons/io5";
 
 const Signup = () => {
   const [email, setEmail] = useState();
@@ -30,6 +31,14 @@ const Signup = () => {
   return (
     <>
       <section className="max-w-[600px] flex flex-col gap-4 absolute top-1/2 left-[10%] -translate-y-1/2 z-20">
+        <div className="absolute -top-[20%]  -left-[20%]   scale-[2]">
+          <Link to="/">
+            <IoArrowBackOutline
+              className="hover:bg-green-500 rounded-full"
+              style={{ color: "white", scale: "2" }}
+            />
+          </Link>
+        </div>
         <h2 className="text-7xl text-white">
           Let's be{" "}
           <span

@@ -3,19 +3,24 @@ import { createContext, useState } from "react";
 export const UserContext = createContext(null);
 
 export const UserProvider = (props) => {
-  const [userCart, setUserCart] = useState([]);
-  const [isCart, setIsCart] = useState(false);
-  const [userEmail, setUserEmail] = useState(null);
+  const [cartItems, setCartItems] = useState([]);
+  const [cartLen, setCartLen] = useState(0);
+
+  const isItemInCart = (item) => {
+    console.log(cartItems);
+    if (cartItems.find((ele) => ele === item)) {
+      return true;
+    } else return false;
+  };
 
   return (
     <UserContext.Provider
       value={{
-        userCart,
-        setUserCart,
-        isCart,
-        setIsCart,
-        userEmail,
-        setUserEmail,
+        setCartItems,
+        isItemInCart,
+        setCartLen,
+        cartLen,
+        cartItems,
       }}
     >
       {props.children}

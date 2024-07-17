@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { GiAbstract037 } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../Context/UserContext";
+import axios from "axios";
 
 const Navbar = () => {
   const parentref = useRef();
@@ -9,16 +10,11 @@ const Navbar = () => {
   const portref = useRef();
   const signupref = useRef();
   const loginref = useRef();
-  const [user, setUser] = useState(null);
-  // const [hovering, setHovering] = useState(false);
 
-  const cart = useContext(UserContext);
+  // const [userCart, setUserCart] = useState([]);
+  const [hover, setHover] = useState(false);
 
-  useEffect(() => {
-    // setUser(localStorage.getItem("user"));
-
-    setUser(cart.userEmail);
-  });
+  const user = useContext(UserContext);
 
   const handlenavbarenter = (e, index) => {
     let left;
@@ -49,6 +45,38 @@ const Navbar = () => {
     ref.current.style.opacity = 0;
   };
 
+  const cssLinkName = (name) => {
+    if (
+      name === "outline" ||
+      name === "boxshadow" ||
+      name === "border" ||
+      name === "borderradius"
+    ) {
+      return "/box";
+    } else if (name === "liststyle") {
+      return "/liststyle";
+    } else if (name === "cursor") {
+      return "/miscellaneous";
+    } else if (
+      name === "scale" ||
+      name === "skew" ||
+      name === "rotate" ||
+      name === "translarte"
+    ) {
+      return "/transform";
+    } else if (
+      name === "textsize" ||
+      name === "letterspacing" ||
+      name === "weight" ||
+      name === "textshadow" ||
+      name === "color"
+    ) {
+      return "/text";
+    } else {
+      return "/filter";
+    }
+  };
+
   return (
     <nav className="w-full md:flex  justify-center items-center text-white pt-5 hidden">
       <div className="bg-[#1A1A1A] md:flex justify-between p-1 px-6 rounded-full z-20">
@@ -70,36 +98,56 @@ const Navbar = () => {
             onMouseEnter={(e) => handlenavbarenter(e, 0)}
             onMouseLeave={handlenavbarleave}
           >
-            <div id="fav" className="bg-red">
-              <p>Favorites</p>
-              <div
-                id="favitems"
-                className="min-h-[50px] opacity-0 absolute bg-white p-2 font-semibold text-sm top-[180%] left-0 rounded-lg flex items-center justify-center"
-              >
-                <div className="flex gap-2 flex-col p-2 ">
-                  {cart.isCart ? (
-                    // cart.userCart.map((item, index) => {
-                    //   return (
-                    //     <div key={index} className="flex items-center gap-2">
-                    //       <div className="flex items-center gap-2">
-                    //         <div className="bg-black w-4 h-4 rounded-full"></div>
-                    //         <p className="text-white">{item.propertyName}</p>
-                    //       </div>
-                    //     </div>
-                    //   );
-                    // })
-                    <div>{cart.userCart}</div>
-                  ) : (
-                    <>
-                      {user === null ? (
-                        <p>Login to make Favorite cart</p>
-                      ) : (
-                        <p>{cart.userCart}</p>
-                      )}
-                    </>
-                  )}
+            <div id="fav" className="relative">
+              <p onMouseEnter={() => setHover(true)}>Favorites</p>
+              {hover && (
+                <div
+                  // id="favitems"
+                  className="min-h-[50px]  absolute top-[150%] left-[50%] translate-x-[-50%]  p-2 font-semibold text-sm  rounded-lg flex items-center justify-center"
+                >
+                  <div
+                    onMouseLeave={() => setHover(false)}
+                    className={`${
+                      user.cartItems && user.cartItems.length >= 4
+                        ? "w-[250px]"
+                        : ""
+                    }  p-1`}
+                  >
+                    {user.cartItems && user.cartItems.length !== 0 ? (
+                      <div>
+                        <ol
+                          className={`flex flex-row flex-wrap  gap-5 text-sm text-${
+                            hover ? "black" : "transparent"
+                          }`}
+                        >
+                          {user.cartItems.map((ele, index) => {
+                            return (
+                              <Link
+                                className="hover:text-red-400 capitalize"
+                                to={`/cssproperties${cssLinkName(ele)}${
+                                  ele === "liststyle" || ele === "cursor"
+                                    ? ""
+                                    : `/${ele}`
+                                }`}
+                              >
+                                <li>{ele}</li>
+                              </Link>
+                            );
+                          })}
+                        </ol>
+                      </div>
+                    ) : (
+                      <>
+                        {localStorage.getItem("user") === null ? (
+                          <p>Login to make Favorite cart</p>
+                        ) : (
+                          <p>NO FAVOURITE CSS PROPERTY</p>
+                        )}
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
           <div
@@ -118,7 +166,7 @@ const Navbar = () => {
             onMouseLeave={handlenavbarleave}
             ref={loginref}
           >
-            {!user ? (
+            {!localStorage.getItem("user") ? (
               <Link to="/user/login" className=" duration-500 ease-out">
                 Login
               </Link>

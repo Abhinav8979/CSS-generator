@@ -1,7 +1,7 @@
 // import { data } from "autoprefixer";
 // import axios from "axios";
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../Context/UserContext";
 import { FaHeart } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
@@ -9,9 +9,12 @@ import { CiHeart } from "react-icons/ci";
 const Cursor = () => {
   const [cursor, setCursor] = useState("auto");
   const [click, setClick] = useState(false);
+
   const user = useContext(UserContext);
 
-  // const cart = useContext(UserContext);
+  useEffect(() => {
+    setClick(user.isItemInCart("cursor"));
+  }, []);
 
   const handleCursor = (e) => {
     e.preventDefault();
@@ -22,11 +25,11 @@ const Cursor = () => {
   const handleLike = async () => {
     const res = await axios.put("http://localhost:8000/api/user/addcart", {
       data: {
-        cssName: param,
-        email: user.userEmail,
+        cssName: "cursor",
+        email: localStorage.getItem("user"),
       },
     });
-    // console.log(res);
+    user.setCartLen((prev) => prev + 1);
     setClick(true);
   };
 
@@ -35,11 +38,12 @@ const Cursor = () => {
       "http://localhost:8000/api/user/removecart",
       {
         data: {
-          cssName: param,
-          email: user.userEmail,
+          cssName: "cursor",
+          email: localStorage.getItem("user"),
         },
       }
     );
+    user.setCartLen((prev) => prev - 1);
     setClick(false);
   };
 

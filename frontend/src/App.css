@@ -5,7 +5,7 @@
 }
 
 /* navbar animations */
-#favitems {
+/* #favitems {
   transition: all 500ms ease-in-out;
 }
 #fav:hover #favitems {
@@ -13,7 +13,7 @@
   opacity: 1;
   color: black;
   transform: translateY(-30%);
-}
+} */
 
 .nav_ele_container {
   position: relative;
@@ -34,6 +34,19 @@
 }
 
 /* Get started  animation */
+
+#fav > div {
+  background-color: transparent;
+}
+
+#fav > div:hover {
+  background-color: aliceblue;
+}
+
+#fav:hover > div {
+  background-color: aliceblue;
+}
+
 #get_started {
   transition: background-color 200ms ease-in-out;
 }

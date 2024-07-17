@@ -8,7 +8,7 @@ export const cssprop = [
       },
       {
         name: "Box Shadow",
-        link: "/cssproperties/box/shadow",
+        link: "/cssproperties/box/boxshadow",
       },
       {
         name: "Border",
@@ -37,7 +37,7 @@ export const cssprop = [
       },
       {
         name: "Text Shadow",
-        link: "/cssproperties/text/shadow",
+        link: "/cssproperties/text/textshadow",
       },
       {
         name: "Color",

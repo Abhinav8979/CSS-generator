@@ -19,17 +19,18 @@ const Textprop = () => {
   const user = useContext(UserContext);
 
   useEffect(() => {
+    setClick(user.isItemInCart(parameter.textId));
     setParam(parameter.textId);
-    // console.log(parameter);
   }, [parameter]);
 
   const handleLike = async () => {
     const res = await axios.put("http://localhost:8000/api/user/addcart", {
       data: {
         cssName: param,
-        email: user.userEmail,
+        email: localStorage.getItem("user"),
       },
     });
+    user.setCartLen((prev) => prev + 1);
     // console.log(res);
     setClick(true);
   };
@@ -40,10 +41,11 @@ const Textprop = () => {
       {
         data: {
           cssName: param,
-          email: user.userEmail,
+          email: localStorage.getItem("user"),
         },
       }
     );
+    user.setCartLen((prev) => prev - 1);
     setClick(false);
   };
 
@@ -218,7 +220,7 @@ const Textprop = () => {
             )}
             {/* TEXT SHADOW */}
 
-            {param === "shadow" && (
+            {param === "textshadow" && (
               <div className="border p-2 px-4 rounded-lg pb-4">
                 <div className="flex  justify-between">
                   <h2 className="text-sm  text-neutral-300">Text Shadow</h2>

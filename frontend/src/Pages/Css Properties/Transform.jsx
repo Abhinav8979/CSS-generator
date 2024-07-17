@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import { FaHeart } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { UserContext } from "../../Context/UserContext";
+import axios from "axios";
 
 const Transform = () => {
   //   const [prespective, setPrespective] = useState(0);
@@ -22,17 +23,18 @@ const Transform = () => {
 
   useEffect(() => {
     setParam(parameter.transformId);
-    // console.log(parameter);
+    setClick(user.isItemInCart(parameter.transformId));
   }, [parameter]);
 
   const handleLike = async () => {
     const res = await axios.put("http://localhost:8000/api/user/addcart", {
       data: {
         cssName: param,
-        email: user.userEmail,
+        email: localStorage.getItem("user"),
       },
     });
     // console.log(res);
+    user.setCartLen((prev) => prev + 1);
     setClick(true);
   };
 
@@ -42,10 +44,11 @@ const Transform = () => {
       {
         data: {
           cssName: param,
-          email: user.userEmail,
+          email: localStorage.getItem("user"),
         },
       }
     );
+    user.setCartLen((prev) => prev - 1);
     setClick(false);
   };
 

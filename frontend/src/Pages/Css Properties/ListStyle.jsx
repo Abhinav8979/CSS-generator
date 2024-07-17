@@ -2,31 +2,29 @@ import React, { useContext, useEffect, useState } from "react";
 import Mouse from "../../Utils/Mouse";
 import { FaHeart } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
-import { useParams } from "react-router";
+// import { useParams } from "react-router";
 import { UserContext } from "../../Context/UserContext";
+import axios from "axios";
 
 const ListStyle = () => {
   const [listStyle, setListStyle] = useState("disc");
   const [click, setClick] = useState(false);
 
-  const [param, setParam] = useState();
-  const parameter = useParams();
-
   const user = useContext(UserContext);
 
   useEffect(() => {
-    setParam(parameter.textId);
-    // console.log(parameter);
-  }, [parameter]);
+    setClick(user.isItemInCart("liststyle"));
+  }, []);
 
   const handleLike = async () => {
     const res = await axios.put("http://localhost:8000/api/user/addcart", {
       data: {
-        cssName: param,
-        email: user.userEmail,
+        cssName: "liststyle",
+        email: localStorage.getItem("user"),
       },
     });
-    // console.log(res);
+    // console.log(res.data.cartArray);
+    user.setCartLen((prev) => prev + 1);
     setClick(true);
   };
 
@@ -35,11 +33,12 @@ const ListStyle = () => {
       "http://localhost:8000/api/user/removecart",
       {
         data: {
-          cssName: param,
-          email: user.userEmail,
+          cssName: "liststyle",
+          email: localStorage.getItem("user"),
         },
       }
     );
+    user.setCartLen((prev) => prev - 1);
     setClick(false);
   };
 

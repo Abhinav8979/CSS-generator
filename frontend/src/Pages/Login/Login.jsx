@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { UserContext } from "../../Context/UserContext";
+import { IoArrowBackOutline } from "react-icons/io5";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,26 +22,26 @@ const Login = () => {
         },
       });
 
-      cart.setUserEmail(email);
+      console.log(res);
 
-      const cartinstance = await axios.get(
-        "http://localhost:8000/api/user/getcart",
-        {
-          data: {
-            email: email,
-          },
-        }
-      );
-      cart.setUserCart(cartinstance.data.message);
-      cart.setIsCart(cartinstance.data.cartArray);
+      localStorage.setItem("user", res.data.user.email);
+
       toast(res.data.message);
       navigate("/");
     } catch (error) {
-      console.log(error);
+      console.log("error", error);
     }
   };
   return (
     <section className="max-w-[600px] flex flex-col gap-4 absolute top-1/2 left-[10%] -translate-y-1/2 z-20">
+      <div className="absolute -top-[20%]  -left-[20%]   scale-[2]">
+        <Link to="/">
+          <IoArrowBackOutline
+            className="hover:bg-green-500 rounded-full"
+            style={{ color: "white", scale: "2" }}
+          />
+        </Link>
+      </div>
       <h2 className="text-7xl text-white">
         Let's be{" "}
         <span
@@ -62,14 +63,14 @@ const Login = () => {
         type="text"
         className="outline-none focus:border-[#a7d2b9] border-2  bg-[#1A1D22] w-full mt-4 p-3 rounded-md text-white hover:border-[#358E5C]"
         placeholder="User Name"
-        value={email}
+        // value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
       <input
         type="text"
         className="outline-none focus:border-[#8cfaba] border-2 bg-[#1A1D22] w-full p-3 rounded-md text-white hover:border-[#358E5C]"
         placeholder="Password"
-        value={password}
+        // value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
       <p
